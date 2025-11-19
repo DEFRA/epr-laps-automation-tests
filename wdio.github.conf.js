@@ -21,7 +21,7 @@ export const config = {
   port: process.env.CHROMEDRIVER_PORT || 4444,
 
   // Tests to run
-  specs: ['./test/specs/**/*.js'],
+  specs: ['./features/STPhase1/*.feature'],
   // Tests to exclude
   exclude: [],
   maxInstances: 1,
@@ -84,6 +84,19 @@ export const config = {
       }
     ]
   ],
+
+  cucumberOpts: {
+    require: [
+      './features/step-definitions/*.js',
+      './features/step-definitions/*.js'
+      // './test/hooks.js',
+      // Or search a (sub)folder for JS files with a wildcard
+      // works since version 1.1 of the wdio-cucumber-framework
+      // './src/**/*.js',
+    ],
+    scenarioLevelReporter: false,
+    order: 'defined'
+  },
 
   // Options to be passed to Mocha.
   // See the full list at http://mochajs.org/

@@ -4,7 +4,7 @@
     "baseUrl": "./",
     "paths": {
       "~/*": ["./*"],
-      "page-objects/*": ["./test/page-objects/*"],
+      "page-objects/*": ["./features/page-objects/*"],
       "components/*": ["./test/components/*"]
     }
   },

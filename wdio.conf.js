@@ -1,27 +1,17 @@
 import fs from 'node:fs'
 
-const oneMinute = 60 * 1000
+// const oneMinute = 60 * 1000
 
 export const config = {
-  //
-  // ====================
-  // Runner Configuration
-  // ====================
-  // WebdriverIO supports running e2e tests as well as unit and component tests.
   runner: 'local',
-  //
-  // Set a base URL in order to shorten url command calls. If your `url` parameter starts
-  // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
-  // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
-  // gets prepended directly.
-  baseUrl: `https://epr-laps-automation-tests.${process.env.ENVIRONMENT}.cdp-int.defra.cloud`,
+  baseUrl: `https://epr-laps-frontend.${process.env.ENVIRONMENT}.cdp-int.defra.cloud`,
 
   // Connection to remote chromedriver
   hostname: process.env.CHROMEDRIVER_URL || '127.0.0.1',
   port: process.env.CHROMEDRIVER_PORT || 4444,
 
   // Tests to run
-  specs: ['./test/specs/**/*.js'],
+  specs: ['./features/STPhase1/WIP_CEO.feature'],
   // Tests to exclude
   exclude: [],
   maxInstances: 1,
@@ -70,7 +60,7 @@ export const config = {
   waitforInterval: 200,
   connectionRetryTimeout: 6000,
   connectionRetryCount: 3,
-  framework: 'mocha',
+  framework: 'cucumber',
 
   reporters: [
     [
@@ -91,12 +81,22 @@ export const config = {
     ]
   ],
 
+  cucumberOpts: {
+    require: [
+      './features/step-definitions/*.js',
+      './features/step-definitions/*.js'
+      // './test/hooks.js',
+      // Or search a (sub)folder for JS files with a wildcard
+      // works since version 1.1 of the wdio-cucumber-framework
+      // './src/**/*.js',
+    ],
+    scenarioLevelReporter: false,
+    order: 'defined'
+  },
+
   // Options to be passed to Mocha.
   // See the full list at http://mochajs.org/
-  mochaOpts: {
-    ui: 'bdd',
-    timeout: oneMinute
-  },
+
   //
   // =====
   // Hooks
@@ -185,16 +185,15 @@ export const config = {
    * @param {boolean} result.passed    true if test has passed, otherwise false
    * @param {object}  result.retries   information about spec related retries, e.g. `{ attempts: 0, limit: 0 }`
    */
-  afterTest: async function (
-    test,
-    context,
-    { error, result, duration, passed, retries }
-  ) {
-    if (error) {
-      await browser.takeScreenshot()
-    }
-  },
-
+  //  afterTest: async function (
+  //    test,
+  //    context,
+  //    { error, result, duration, passed, retries }
+  //  ) {
+  //   if (error) {
+  //     await browser.takeScreenshot()
+  //   }
+  //
   /**
    * Hook that gets executed after the suite has ended
    * @param {object} suite suite details
