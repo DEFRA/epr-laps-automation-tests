@@ -2,7 +2,7 @@ import allure from 'allure-commandline'
 
 const debug = process.env.DEBUG
 const oneMinute = 60 * 1000
-const oneHour = 60 * 60 * 1000
+// const oneHour = 60 * 60 * 1000
 
 const execArgv = ['--loader', 'esm-module-alias/loader']
 
@@ -33,7 +33,7 @@ export const config = {
   // then the current working directory is where your `package.json` resides, so `wdio`
   // will be called from there.
   //
-  specs: ['./test/specs/**/*.e2e.js'],
+  specs: ['./features/STPhase1/WIP_CEO.feature'],
   // Patterns to exclude.
   exclude: [
     // 'path/to/excluded/files'
@@ -62,22 +62,11 @@ export const config = {
   // https://saucelabs.com/platform/platform-configurator
   //
 
-  capabilities: debug
-    ? [{ browserName: 'chrome' }]
-    : [
-        {
-          maxInstances: 1,
-          browserName: 'chrome',
-          'goog:chromeOptions': {
-            args: [
-              '--no-sandbox',
-              '--disable-infobars',
-              '--disable-gpu',
-              '--window-size=1920,1080'
-            ]
-          }
-        }
-      ],
+  capabilities: [
+    {
+      browserName: 'chrome'
+    }
+  ],
 
   execArgv,
 
@@ -142,7 +131,7 @@ export const config = {
   //
   // Make sure you have the wdio adapter package for the specific framework installed
   // before running any tests.
-  framework: 'mocha',
+  framework: 'cucumber',
   //
   // The number of times to retry the entire specfile when it fails as a whole
   // specFileRetries: 1,
@@ -167,12 +156,22 @@ export const config = {
     ]
   ],
 
+  cucumberOpts: {
+    require: [
+      './features/step-definitions/*.js',
+      './features/step-definitions/*.js'
+      // './test/hooks.js',
+      // Or search a (sub)folder for JS files with a wildcard
+      // works since version 1.1 of the wdio-cucumber-framework
+      // './src/**/*.js',
+    ],
+    scenarioLevelReporter: false,
+    order: 'defined'
+  },
+
   // Options to be passed to Mocha.
   // See the full list at http://mochajs.org/
-  mochaOpts: {
-    ui: 'bdd',
-    timeout: debug ? oneHour : 60000
-  },
+
   //
   // =====
   // Hooks
@@ -261,19 +260,19 @@ export const config = {
    * @param {boolean} result.passed    true if test has passed, otherwise false
    * @param {object}  result.retries   information about spec related retries, e.g. `{ attempts: 0, limit: 0 }`
    */
-  afterTest: async function (
-    test,
-    context,
-    { error, result, duration, passed, retries }
-  ) {
-    await browser.takeScreenshot()
+  // afterTest: async function (
+  //   test,
+  // context,
+  //  { error, result, duration, passed, retries }
+  // ) {
+  //  await browser.takeScreenshot()
 
-    if (error) {
-      browser.executeScript(
-        'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed","reason": "At least 1 assertion failed"}}'
-      )
-    }
-  },
+  //  if (error) {
+  //   browser.executeScript(
+  //     'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed","reason": "At least 1 assertion failed"}}'
+  //   )
+  //  }
+  //  },
 
   /**
    * Hook that gets executed after the suite has ended
