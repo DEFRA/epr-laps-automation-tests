@@ -1,27 +1,49 @@
 import { Given, When, Then } from '@wdio/cucumber-framework'
 // const { Given, When, Then } = require('@wdio/cucumber-framework');
 import { expect, browser } from '@wdio/globals'
-import * as path from 'path'
+// import * as path from 'path'
 import SecurePage from '../page-objects/secure.page.js'
-
 import { clickElement, setValue } from './Common.js'
 import LoginPage from '../page-objects/login.page.js'
 import { dataConfig } from '../../dataConfig.js'
 import logger from '../../logger.js'
-import * as fs from 'fs'
+// import * as fs from 'fs'
 import allureReporter from '@wdio/allure-reporter'
 import assert from 'assert'
-import { fileURLToPath } from 'url'
+// import { fileURLToPath } from 'url'
+// import axios from 'axios'
+// import * as qs from 'qs'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+// const __filename = fileURLToPath(import.meta.url)
+// const __dirname = path.dirname(__filename)
 
 Given(/^I am on the home page$/, async () => {
   await browser.maximizeWindow()
-  await browser.url(dataConfig.expectedUrls.dev)
+  await browser.url(dataConfig.expectedUrls.test)
+  // browser.pause(10)
 
   const screenshot = await browser.takeScreenshot()
   allureReporter.addAttachment('Screenshot', screenshot, 'image/png')
+})
+
+Then(/^I navigate to the "(.+)" page$/, async (pageName) => {
+  await browser.maximizeWindow()
+
+  const pageUrls = {
+    ConfirmBankDetails: dataConfig.expectedUrls.confirmBankdetails,
+    UpdateBankDetails: dataConfig.expectedUrls.updateBankdetails,
+    CheckBankDetails: dataConfig.expectedUrls.checkBankdetails,
+    SubmitBankDetails: dataConfig.expectedUrls.submitBankdetails,
+    LAPS: dataConfig.expectedUrls.test
+  }
+
+  const url = pageUrls[pageName]
+
+  if (!url) {
+    throw new Error(`No URL mapped for page: ${pageName}`)
+  }
+
+  await browser.url(url)
 })
 
 Then(
@@ -56,61 +78,80 @@ Then(/^I can see "(.+)" link$/, async (linkText) => {
   }
 })
 
-When(/^I click "(.+)" link$/, async (linkText) => {
-  const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
-  const reportsDir = path.resolve(__dirname, '../../reports')
-
-  // Ensure reports directory exists
-  if (!fs.existsSync(reportsDir)) {
-    fs.mkdirSync(reportsDir, { recursive: true })
+Then(/^I cannot see "(.+)" link$/, async (linkText) => {
+  try {
+    const link = await SecurePage.getLink(linkText)
+    await expect(link).not.toBeExisting()
+    logger.info(`Able to view the link: ${linkText}`)
+  } catch (error) {
+    logger.info(`Could not find the link: ${linkText}`)
+    throw error
   }
+})
 
-  const fileName = `click_${linkText}_${timestamp}.png`
-  const filePath = path.join(reportsDir, fileName)
-
+When(/^I click "(.+)" link$/, async (linkText) => {
+  // const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
+  // const reportsDir = path.resolve(__dirname, '../../reports')
+  // Ensure reports directory exists
+  // if (!fs.existsSync(reportsDir)) {
+  //  fs.mkdirSync(reportsDir, { recursive: true })
+  // }
+  // const fileName = `click_${linkText}_${timestamp}.png`
+  // const filePath = path.join(reportsDir, fileName)
   try {
     const link = await SecurePage.getLink(linkText)
     await link.click()
     logger.info(`Clicked the link: ${linkText}`)
   } catch (error) {
     logger.info(`Failed to click the link: ${linkText}`)
-    await browser.saveScreenshot(filePath)
-    logger.info(`Screenshot saved (on error) to ${filePath}`)
+    // await browser.saveScreenshot(filePath)
+    // logger.info(`Screenshot saved (on error) to ${filePath}`)
     throw error
   }
 
   // Also take screenshot on success
-  await browser.saveScreenshot(filePath)
-  logger.info(`Screenshot saved (on success) to ${filePath}`)
+  // await browser.saveScreenshot(filePath)
+  // logger.info(`Screenshot saved (on success) to ${filePath}`)
 })
 
-Then(/^I fill in the email address for "(.+)"$/, async (user) => {
-  await enterEmailAddress(user)
-})
+//
+// -------------------------------
+//  CUCUMBER STEP DEFINITIONS
+// -------------------------------
+//
 
-async function enterEmailAddress(user) {
-  const userEmailInput = await SecurePage.getinputbyid('user_name')
-  await userEmailInput.waitForExist({ timeout: 10000 })
+// When(/^I enter email as user "(.+)"$/, async (user) => {
+//  const email = resolveEmail(user)
+//  await $('#email').setValue(email)
+// })
 
-  let email
+// Then(/^I fill in the email address for "(.+)"$/, async (user) => {
+//  await enterEmailAddress(user)
+// })
 
-  if (user === 'CEO') {
-    email = dataConfig.credentials.ceoemail
-  } else if (user === 'CEO_UnconfirmedBankdetails') {
-    email = dataConfig.credentials.unconfirmedceoemail
-  } else if (user === 'HOF') {
-    email = dataConfig.credentials.hofemail
-  } else if (user === 'HOF_UnconfirmedBankdetails') {
-    email = dataConfig.credentials.unconfirmedhofemail
-  } else if (user === 'HOW') {
-    email = dataConfig.credentials.howemail
-  } else {
-    throw new Error(`No email configured for user: ${user}`)
-  }
+// async function enterEmailAddress(user) {
+//  const userEmailInput = await SecurePage.getinputbyid('user_name')
+//  await userEmailInput.waitForExist({ timeout: 10000 })
 
-  await userEmailInput.setValue(email)
-  logger.info(`Email entered for ${user}: ${email}`)
-}
+//  let email
+
+//  if (user === 'CEO') {
+//    email = dataConfig.credentials.ceoemail
+//  } else if (user === 'CEO_UnconfirmedBankdetails') {
+//    email = dataConfig.credentials.unconfirmedceoemail
+//  } else if (user === 'HOF') {
+//    email = dataConfig.credentials.hofemail
+//  } else if (user === 'HOF_UnconfirmedBankdetails') {
+//    email = dataConfig.credentials.unconfirmedhofemail
+//  } else if (user === 'HOW') {
+//    email = dataConfig.credentials.howemail
+//  } else {
+//    throw new Error(`No email configured for user: ${user}`)
+//  }
+
+//  await userEmailInput.setValue(email)
+//  logger.info(`Email entered for ${user}: ${email}`)
+// }
 
 Then(/^I am on the "(.+)" page$/, async (pageName) => {
   try {
@@ -129,12 +170,37 @@ Then(/^I am on the "(.+)" page$/, async (pageName) => {
 
 Then(/^I validate "(.+)" text on the page$/, async (paraName) => {
   try {
-    const textElement = SecurePage.paraText(paraName)
+    const textElement = await SecurePage.paraText(paraName)
     await expect(textElement).toBeDisplayed()
   } catch (e) {
-    throw new Error(`Message not displayed" -  ${e?.message || e}`)
+    throw new Error(`Message not displayed - ${e?.message || e}`)
   }
 })
+
+Then(
+  /^I validate "(.+)" text is not displayed on the page$/,
+  async (paraName) => {
+    try {
+      const textElement = await SecurePage.paraText(paraName)
+      await expect(textElement).not.toBeDisplayed()
+    } catch (e) {
+      throw new Error(`Message not displayed - ${e?.message || e}`)
+    }
+  }
+)
+
+Then(
+  /^I confirm the bank details in the Confirm bank details page$/,
+  async () => {
+    try {
+      await clickElement(await SecurePage.getcheckboxid())
+    } catch (e) {
+      throw new Error(
+        `Confirm bank details checkbox not clicked - ${e?.message || e}`
+      )
+    }
+  }
+)
 
 Then(
   /^I validate the Important banner "(.+)" text on the page$/,
@@ -367,6 +433,25 @@ Then(
       }
     } catch (e) {
       throw new Error(`Error validating fields: ${e?.message || e}`)
+    }
+  }
+)
+
+Then(
+  /^I validate "(.+)" field value contains "(.+)"$/,
+  async function (fieldName, expectedText) {
+    try {
+      const fieldValueElement = await SecurePage.getFieldValue(fieldName)
+      await expect(fieldValueElement).toBeDisplayed()
+
+      const actualText = (await fieldValueElement.getText()).trim()
+      logger.info(`Field: ${fieldName}, Cell Text: ${actualText}`)
+
+      await expect(actualText).toContain(expectedText)
+    } catch (e) {
+      throw new Error(
+        `Error validating table field contains text: ${e?.message || e}`
+      )
     }
   }
 )
@@ -696,27 +781,273 @@ Then(
   }
 )
 
-Then(
-  'I do not enter any bank details in the New bank account details page',
-  () => {
-    // Write code here that turns the phrase above into concrete actions
-  }
-)
-
 Then('I should see a field error message {string}', (s) => {
   // Write code here that turns the phrase above into concrete actions
 })
 
+When(/^I enter "([^"]*)" as account name$/, async (accountName) => {
+  await SecurePage.accountNameInput.addValue(accountName)
+})
+
+When(/^I enter "([^"]*)" as sort code$/, async (sortCode) => {
+  await SecurePage.sortCodeInput.addValue(sortCode)
+})
+
+When(/^I enter "([^"]*)" as account number$/, async (accountNumber) => {
+  await SecurePage.accountNumberInput.addValue(accountNumber)
+})
+
+Then(/^I should see inline errors for the fields$/, async () => {
+  const expectedInlineErrors = {
+    Name: 'Enter your name',
+    Code: 'Enter a valid code',
+    Number: 'Enter a valid number'
+  }
+
+  const fieldToElementMap = {
+    Name: SecurePage.NameInlineError,
+    Code: SecurePage.CodeInlineError,
+    Number: SecurePage.NumberInlineError
+  }
+
+  for (const [field, expectedText] of Object.entries(expectedInlineErrors)) {
+    const errorElement = fieldToElementMap[field]
+
+    await expect(errorElement).toBeDisplayed()
+    await expect(errorElement).toHaveText(expectedText)
+  }
+})
+
+Then(/^I should see an error summary at the top of the page$/, async () => {
+  // Validate summary heading
+  await expect(SecurePage.errorSummaryHeading).toBeDisplayed()
+
+  await expect(SecurePage.errorSummaryHeading).toHaveText('There is a problem')
+
+  // Expected errors
+  const expectedErrors = [
+    'Enter your first name',
+    'Enter your last name',
+    'Enter a valid email address'
+  ]
+
+  // Get actual errors
+  const actualErrors = await Promise.all(
+    (await SecurePage.errorMessages).map((el) => el.getText())
+  )
+
+  // Exact match (order matters)
+  await expect(actualErrors).toEqual(expectedErrors)
+})
+
 Then(
-  'I do not enter any bank details in the New bank account details page',
-  () => {
-    // Write code here that turns the phrase above into concrete actions
+  /^I should see "([^"]*)" inline for "([^"]*)"$/,
+  async (expectedError, field) => {
+    let errorElement
+
+    switch (field) {
+      case 'accountName':
+        errorElement = SecurePage.accountNameInlineError
+        break
+      case 'sortCode':
+        errorElement = SecurePage.sortCodeInlineError
+        break
+      case 'accountNumber':
+        errorElement = SecurePage.accountNumberInlineError
+        break
+      default:
+        throw new Error(`Unknown field: ${field}`)
+    }
+
+    await expect(errorElement).toBeDisplayed()
+    await expect(errorElement).toHaveText(expectedError)
   }
 )
 
 Then(
-  'I fill in the invalid bank details in the New bank account details page',
-  () => {
-    // Write code here that turns the phrase above into concrete actions
+  /^I should {2}"([^"]*)" at the top of the page$/,
+  async (expectedError) => {
+    await expect(SecurePage.errorSummary).toBeDisplayed()
+    await expect(SecurePage.errorSummary).toHaveTextContaining(expectedError)
   }
 )
+
+/// //////////DOC STEPOS FOR TESTING//////////////////
+
+Then(/^I validate that table is displayed$/, async function () {
+  try {
+    const table = await SecurePage.getdocsTable()
+    const isTablePresent = await table.isExisting()
+
+    if (isTablePresent) {
+      logger.info('Table is displayed')
+
+      // Get all document rows from the table
+      const rows = await $$('//table//tbody//tr')
+
+      logger.info(`Total documents found: ${rows.length}`)
+
+      for (let i = 0; i < rows.length; i++) {
+        const docName = await rows[i].getText()
+        logger.info(`Document ${i + 1}: ${docName}`)
+      }
+    } else {
+      logger.info('Table not present, validating empty state message')
+
+      const noTableMsg = await SecurePage.getNoTableMessage()
+      const messageText = await noTableMsg.getText()
+
+      const expectedMessage = 'text no table present.'
+
+      if (messageText !== expectedMessage) {
+        throw new Error(
+          `Expected message "${expectedMessage}" but found "${messageText}"`
+        )
+      }
+
+      logger.info(`Validated message: ${messageText}`)
+    }
+  } catch (e) {
+    throw new Error(`Error validating table: ${e?.message || e}`)
+  }
+})
+
+Then(
+  /^I capture all document names and download each document$/,
+  { timeout: 60000 },
+  async function () {
+    const rows = await $$('//*[@id="main-content"]/table/tbody/tr')
+    this.documentsList = []
+
+    for (const row of rows) {
+      // Capture document name (td[2])
+      const docNameElement = await row.$('.//td[2]')
+      const docName = await docNameElement.getText()
+
+      this.documentsList.push(docName)
+      logger.info(`Captured document:------ ${docName}`)
+
+      // Download link (td[3])
+      const downloadLink = await row.$('.//td[3]//a')
+
+      await downloadLink.scrollIntoView({ block: 'center' })
+      await downloadLink.waitForClickable({ timeout: 10000 })
+      await downloadLink.click()
+
+      logger.info(`Clicked Download for document: ${docName}`)
+
+      // await browser.pause(500)
+    }
+
+    logger.info(`Total documents processed:------ ${this.documentsList.length}`)
+  }
+)
+
+Then(/^I validate and handle the warning state$/, async () => {
+  try {
+    const warningEl = await SecurePage.warningText()
+    const warningText = (await warningEl.getText()).trim().toLowerCase()
+
+    // console.log(`Warning text: ${warningText}`)
+
+    if (warningText === 'confirmed') {
+      // ✅ CONFIRMED FLOW
+      // console.log('Status is CONFIRMED')
+
+      const banner = await SecurePage.topBanner()
+      await expect(banner).not.toBeDisplayed()
+    } else if (warningText === 'unconfirmed') {
+      // ⚠️ UNCONFIRMED FLOW
+      // console.log('Status is UNCONFIRMED')
+
+      const banner = await SecurePage.topBanner()
+      await expect(banner).toBeDisplayed()
+
+      // Click Confirm link
+      await (await SecurePage.confirmLink()).click()
+
+      // Validate navigation to confirm page
+      await expect(browser).toHaveUrlContaining('confirm')
+
+      // Select checkbox
+      await (await SecurePage.getcheckboxid()).click()
+
+      // Click Continue
+      await (await SecurePage.continueButton()).click()
+
+      // Navigate back (Details page)
+      await (await SecurePage.detailsLink()).click()
+
+      // Validate updated warning text
+      const updatedText = (await (await SecurePage.warningText()).getText())
+        .trim()
+        .toLowerCase()
+
+      await expect(updatedText).toBe('confirmed')
+      // console.log('Status updated to CONFIRMED')
+    } else {
+      throw new Error(`Unexpected warning text: ${warningText}`)
+    }
+  } catch (e) {
+    throw new Error(`Step failed: ${e?.message || e}`)
+  }
+})
+
+Then(/^I download and view each document sequentially$/, async function () {
+  if (!this.documentsList || this.documentsList.length === 0) {
+    throw new Error('No documents captured from the table')
+  }
+
+  const originalWindow = await browser.getWindowHandle()
+  const rows = await $$('//*[@id="main-content"]/table/tbody/tr')
+
+  for (const docName of this.documentsList) {
+    logger.info(`Processing document:----- ${docName}`)
+
+    for (const row of rows) {
+      const name = await row.$('./td[1]').getText()
+
+      if (name === docName) {
+        // ----- Download -----
+        const downloadLink = await row.$('./td[2]//a')
+        await downloadLink.waitForClickable({ timeout: 5000 })
+        await downloadLink.click()
+        logger.info(`Download triggered for:----- ${docName}`)
+
+        // Optional: wait for file to be downloaded (if needed)
+        // await browser.pause(2000)
+
+        // ----- View (PDF) -----
+        const viewLink = await row.$('./td[3]//a')
+        await viewLink.waitForClickable({ timeout: 5000 })
+        await viewLink.click()
+
+        // Wait for the new tab
+        await browser.waitUntil(
+          async () => (await browser.getWindowHandles()).length > 1,
+          { timeout: 5000, timeoutMsg: 'Expected a new tab to open for PDF' }
+        )
+
+        const handles = await browser.getWindowHandles()
+        const newTab = handles.find((h) => h !== originalWindow)
+        await browser.switchToWindow(newTab)
+
+        const url = await browser.getUrl()
+        logger.info(`Opened PDF URL: ${url}`)
+
+        if (!url.includes('.pdf')) {
+          throw new Error(`Expected PDF but opened: ${url}`)
+        }
+
+        // Close PDF tab and return to main
+        await browser.closeWindow()
+        await browser.switchToWindow(originalWindow)
+
+        // Break inner loop to go to next document
+        break
+      }
+    }
+  }
+
+  logger.info(`All documents processed: ${this.documentsList.join(', ')}`)
+})
