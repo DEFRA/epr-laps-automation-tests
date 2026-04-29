@@ -33,7 +33,9 @@ export const config = {
   // then the current working directory is where your `package.json` resides, so `wdio`
   // will be called from there.
   //
-  specs: ['./features/STPhase1/WIP_CEO.feature'],
+  specs: [
+    './features/MVPPhase1/LAPS-1125_Journey4_StandardHoF_NW_UnconfirmedBankDetails.feature'
+  ],
   // Patterns to exclude.
   exclude: [
     // 'path/to/excluded/files'
@@ -117,7 +119,7 @@ export const config = {
   connectionRetryTimeout: 120000,
   //
   // Default request retries count
-  connectionRetryCount: 3,
+  connectionRetryCount: 1,
   //
   // Test runner services
   // Services take over a specific job you don't want to take care of. They enhance
@@ -158,8 +160,8 @@ export const config = {
 
   cucumberOpts: {
     require: [
-      './features/step-definitions/*.js',
       './features/step-definitions/*.js'
+      // './features/step-definitions/*.js'
       // './test/hooks.js',
       // Or search a (sub)folder for JS files with a wildcard
       // works since version 1.1 of the wdio-cucumber-framework

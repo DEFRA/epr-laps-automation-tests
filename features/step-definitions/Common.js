@@ -7,10 +7,6 @@ export async function clickElement(element) {
   await element.click()
 }
 
-export async function iselementPresent(element) {
-  await element.waitForDisplayed({ timeout: 20000 })
-}
-
 // export async function setValueforfield(fieldName:any,value:any){
 //    await (await SecurePage.getLabel(fieldName)).waitForDisplayed({timeout:20000});
 //    await clickElement(await SecurePage.dropdownfieldName(fieldName))

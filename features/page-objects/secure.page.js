@@ -8,10 +8,9 @@ class SecurePage extends Page {
     return $('#flash')
   }
 
-  // getLink(linkText) {
-  //  return $(`//a[contains(.,'${linkText}')] | //a[contains(text(),'${linkText}')]`
-  //  )
-  // }
+  getcheckboxid() {
+    return $(`//*[@id="confirm-bank-details"]`)
+  }
 
   getLink(linkText) {
     // If the text contains a single quote, use concat() to safely build the XPath literal
@@ -20,8 +19,21 @@ class SecurePage extends Page {
       : `'${linkText}'`
 
     return $(
-      `//a[contains(., ${safeText})] | //a[contains(text(), ${safeText})] | //span[contains(., ${safeText})] | //span[contains(text(), ${safeText})]`
+      `//a[contains(., "${safeText}")] | //a[contains(text(), ${safeText})] | //span[contains(., "${safeText}")] | //*[@id="main-content"]//a[contains(.,"${safeText}")]|//span[contains(text(), ${safeText})]`
     )
+  }
+
+  async signoutLink(text) {
+    const links = await $$('a')
+
+    for (const link of links) {
+      const linkText = (await link.getText()).trim()
+      if (linkText === text.trim()) {
+        return link
+      }
+    }
+
+    throw new Error(`Link with text "${text}" not found`)
   }
 
   getButton(buttonText, sectionTitle) {
@@ -31,7 +43,7 @@ class SecurePage extends Page {
       )
     } else {
       return $(
-        `//*[@id="main-content"]//button[contains(text(), "${buttonText}")] | //*[@id="continueReplacement"] | //*[@id="main-content"]//a[contains(normalize-space(text()),"${buttonText}")]`
+        `//*[@id="main-content"]//button[contains(text(), "${buttonText}")] |//*[@id="emailVerificationControl-TTP_but_verify_code"]| //*[@id="continueReplacement"] | //*[@id="main-content"]//a[contains(normalize-space(text()),"${buttonText}")]`
       )
     }
   }
@@ -46,20 +58,50 @@ class SecurePage extends Page {
 
   getHeader(pageName) {
     return $(
-      `//*[@id="main-content"]//h1[normalize-space(.)='${pageName}'] | //*[@id="main-content"]//h1['${pageName}'] |//*[@id="main-content"]//span[contains(text(),'${pageName}')]| //*[contains(@class,'govuk-heading-m')] | //*[@id="main-content"]/span[normalize-space(.)='${pageName}']|//*[@id="main-content"]/h1 |//*[contains(@class,'govuk-heading-m') and contains(.,'${pageName}')]|//*[@id="main-content"]//span[contains(text(),'${pageName}')]`
+      `//*[@id="main-content"]//h1[normalize-space(.)='${pageName}'] | //legend/h1[normalize-space()="${pageName}"]|//*[@id="main-content"]//h1['${pageName}'] |//*[@id="main-content"]//span|//*[@id="main-content"]//*[self::p or self::span][contains(normalize-space(.), "${pageName}")]|//*[@id="main-content"]//span[contains(text(),'${pageName}')]| //*[contains(@class,'govuk-heading-m')] | //*[@id="main-content"]/span[normalize-space(.)='${pageName}']|//*[@id="main-content"]/h1 |//*[contains(@class,'govuk-heading-m') and contains(.,'${pageName}')]|//*[@id="main-content"]//span[contains(text(),'${pageName}')]`
     )
   }
 
   paraText(paraName) {
     return $(
-      `//*[@id="main-content"]//p[contains(normalize-space(.),"${paraName}")]|//*[@id="main-content"]//span[contains(normalize-space(.),"${paraName}")] | //*[@id="main-content"]//h1[normalize-space(.)='${paraName}']`
+      `//*[@id="main-content"]//p[contains(normalize-space(.),"${paraName}")]|//*[@id="main-content"]//span[contains(normalize-space(.),"${paraName}")] |//*[contains(@class,'govuk-heading-m') and contains(.,'${paraName}')]|//*[@id="header"]|//*[@id="replacementConfirmEmail"]/p|//span[contains(.,'${paraName}')]|//*[@id="main-content"]//h1[normalize-space(.)='${paraName}']`
     )
   }
 
   warningText(paraName) {
     return $(
-      `//*[@id="main-content"]//strong[contains(normalize-space(text()),"${paraName}")] | //*[@id="main-content"]//strong[contains(normalize-space(.),"${paraName}")]`
+      `//*[@id="main-content"]//strong[contains(normalize-space(text()),"${paraName}")] | //*[@id="main-content"]//div[contains(normalize-space(.),"${paraName}")]| //*[@id="main-content"]//strong[contains(normalize-space(.),"${paraName}")]`
     )
+  }
+
+  accountNameInput() {
+    return $('#accountName')
+  }
+
+  sortCodeInput() {
+    return $('#sortCode')
+  }
+
+  accountNumberInput() {
+    return $('#accountNumber')
+  }
+
+  // Inline errors
+  accountNameInlineError() {
+    return $('#accountName-error')
+  }
+
+  sortCodeInlineError() {
+    return $('#sortCode-error')
+  }
+
+  accountNumberInlineError() {
+    return $('#accountNumber-error')
+  }
+
+  // Top error summary
+  errorSummary() {
+    return $('//*[@id="main-content"]/div/div/div/div/div/ul')
   }
 
   getErrormessagelist() {
@@ -144,6 +186,18 @@ class SecurePage extends Page {
 
     return await Promise.all(items.map((el) => el.getText()))
   }
+
+  /// //////////////////
+
+  getdocsTable() {
+    return $(`//*[@id="main-content"]/table`)
+  }
+
+  getNoTableMessage() {
+    return $('//div[@data-testid="no-documents-message"]')
+  }
+
+  /// ///////////////////////
 }
 
 export default new SecurePage()
