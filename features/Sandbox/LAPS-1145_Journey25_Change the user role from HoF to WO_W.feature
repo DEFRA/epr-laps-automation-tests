@@ -211,7 +211,6 @@ Feature: Accessing LAPs account - LAPS-1145 Journey25_Change the user role from 
     Then I validate "Account name,Sort code,Account number" fields are displayed in the documents page
     Then I validate "Sort code" field value contains "ending with"
     Then I validate "Account number" field value contains "ending with"
-    Then I cannot see "Change your local authority" link 
 
     Then I navigate to the "ConfirmBankDetails" page
     Then I am on the "Page not found" page

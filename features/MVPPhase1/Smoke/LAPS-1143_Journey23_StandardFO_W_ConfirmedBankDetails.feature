@@ -1,4 +1,6 @@
-Feature: Accessing LAPs account - LAPS-1132 Journey11_FO - Admin User- Non Wales_Unconfirmed
+@regression
+
+Feature: Accessing LAPs account -  LAPS- 1143 Journey23_FO - Standard User- Wales_Confirmed
 
   Scenario: As a valid user, i must be able to login and securely access the LAPs account
 
@@ -7,7 +9,7 @@ Feature: Accessing LAPs account - LAPS-1132 Journey11_FO - Admin User- Non Wales
     When I wait for "9" seconds
     Then I validate "What’s your local authority email address?" text on the page
     Then I validate "We will send a one-time passcode to this email address." text on the page
-    When I enter the email address for "WO_Unconfirmed"
+    When I enter the email address for "FO_Confirmed_Wales"
     When I wait for "5" seconds
     Then I click on "Continue" button
     When I wait for "5" seconds
@@ -40,29 +42,13 @@ Feature: Accessing LAPs account - LAPS-1132 Journey11_FO - Admin User- Non Wales
 ## Payment documents ##
     When I click "Payment documents" link
     Then I am on the "Payment documents" page
-#LAPS-230
-    Then I validate banner with text "Beta This is a new service. Help us improve it and give your feedback (opens in new tab)." on the page
-    When I click "Cymraeg" link
-    Then I validate banner with text "Beta Mae hwn yn wasanaeth newydd. Helpwch ni i’w wella drwy roi eich adborth (yn agor mewn tab newydd)." on the page
-#LAPS-227
-    Then I validate "Dogfennau talu" text on the page
-    Then I can see "Lawrlwytho" link
-    And I can see "Gweld (yn agor mewn tab newydd)" link
-    When I click "English" link
-    Then I wait for "5" seconds
-    Then I validate "Payment documents" text on the page
-
-## Payment documents ##
-
-    When I click "Payment documents" link
-    Then I am on the "Payment documents" page
     And I wait for "9" seconds
-
     #LAPS-230
     Then I validate banner with text "Beta This is a new service. Help us improve it and give your feedback (opens in new tab)." on the page
     When I click "Cymraeg" link
     Then I validate banner with text "Beta Mae hwn yn wasanaeth newydd. Helpwch ni i’w wella drwy roi eich adborth (yn agor mewn tab newydd)." on the page
-
+ # the below step is to validate the council name translated to welsh - should make it parametrized by adding in data config post testing
+    Then I validate "Cyngor Bwrdeistref Sirol Torfaen" text on the page
 #LAPS-227
     Then I validate "Dogfennau talu" text on the page
     Then I can see "Lawrlwytho" link
@@ -95,7 +81,7 @@ Feature: Accessing LAPs account - LAPS-1132 Journey11_FO - Admin User- Non Wales
     When I wait for "9" seconds
     Then I validate "What’s your local authority email address?" text on the page
     Then I validate "We will send a one-time passcode to this email address." text on the page
-    When I enter the email address for "WO_Unconfirmed"
+    When I enter the email address for "FO_Confirmed_Wales"
     When I wait for "5" seconds
     Then I click on "Continue" button
     When I wait for "5" seconds
@@ -114,11 +100,10 @@ Feature: Accessing LAPs account - LAPS-1132 Journey11_FO - Admin User- Non Wales
     Then I validate banner with text "Beta This is a new service. Help us improve it and give your feedback (opens in new tab)." on the page
 #LAPS-167
     Then I validate warning text "The nominated Head of Finance will need to confirm your local authority's bank details." is not displayed on the page
-    Then I validate warning text "Unconfirmed" is displayed on the page
+    Then I validate warning text "Confirmed" is displayed on the page
     Then I validate "Account name,Sort code,Account number" fields are displayed in the documents page
     Then I validate "Sort code" field value contains "ending with"
     Then I validate "Account number" field value contains "ending with"
-    Then I cannot see "Change your local authority" link
     Then I navigate to the "ConfirmBankDetails" page
     Then I am on the "Page not found" page
     Then I click "Cymraeg" link

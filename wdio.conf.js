@@ -4,14 +4,14 @@ import fs from 'node:fs'
 
 export const config = {
   runner: 'local',
-  baseUrl: `https://epr-laps-frontend.${process.env.ENVIRONMENT}.cdp-int.defra.cloud`,
+  // baseUrl: `https://epr-laps-frontend.${process.env.ENVIRONMENT}.cdp-int.defra.cloud`,
 
   // Connection to remote chromedriver
   hostname: process.env.CHROMEDRIVER_URL || '127.0.0.1',
   port: process.env.CHROMEDRIVER_PORT || 4444,
 
   // Tests to run
-  specs: ['./features/STPhase1/WIP_CEO.feature'],
+  specs: ['./features/MVPPhase1/Smoke/*.feature'],
   // Tests to exclude
   exclude: [],
   maxInstances: 1,
@@ -83,7 +83,6 @@ export const config = {
 
   cucumberOpts: {
     require: [
-      './features/step-definitions/*.js',
       './features/step-definitions/*.js'
       // './test/hooks.js',
       // Or search a (sub)folder for JS files with a wildcard

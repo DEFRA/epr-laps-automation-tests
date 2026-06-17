@@ -19,7 +19,24 @@ class SecurePage extends Page {
       : `'${linkText}'`
 
     return $(
-      `//a[contains(., "${safeText}")] | //a[contains(text(), ${safeText})] | //span[contains(., "${safeText}")] | //*[@id="main-content"]//a[contains(.,"${safeText}")]|//span[contains(text(), ${safeText})]`
+      `//a[contains(., "${safeText}")] | //a[contains(text(), ${safeText})] | //span[contains(., "${safeText}")] |//*[@id="link-local-authority-payments"]|//*[@id="main-content"]//a[contains(.,"${safeText}")]|//span[contains(text(), ${safeText})]`
+    )
+  }
+
+  manageLink(linkText) {
+    // If the text contains a single quote, use concat() to safely build the XPath literal
+    const safeText = linkText.includes("'")
+      ? `concat('${linkText.replace(/'/g, `', "'", '`)}')`
+      : `'${linkText}'`
+
+    return $(
+      `//span[contains(., "${safeText}")] |//*[contains(@class,'govuk-table') and contains(.,"${safeText}")]| //*[@id="main-content"]//span[contains(.,"${safeText}")]|//span[contains(text(), ${safeText})]`
+    )
+  }
+
+  async getCheckbox(label) {
+    return $(
+      `//label[contains(normalize-space(),"${label}")]/preceding-sibling::input[@type="checkbox"]`
     )
   }
 

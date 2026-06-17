@@ -1,26 +1,7 @@
-// import * as path from 'path';
-// src/config/dataConfig.ts
-
-// function generateConfig(){
-//   const envValue=`${process.env.node_env}`
-//   return{
-//     home: 'https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs',
-//     devHome: `https://${envValue}-www.gov.uk/government/organisations/department-for-environment-food-rural-affairs`,
-
-//   };}
-//   const dataConfig = generateConfig();
-//   export {dataConfig};
-
 export const dataConfig = {
   expectedUrls: {
-    home: 'https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs', // key must match pageName exactly
-    dashboard: 'https://example.com/dashboard',
-    herokuapp: 'https://laps-prototype-v2-c806840ce211.herokuapp.com/',
-    EPage: 'https://eprsit.service-now.com/gsp?sysparm_use_polaris=false',
-    stripe:
-      'https://invoice.stripe.com/i/acct_1RLkuI03qokYrBOZ/test_YWNjdF8xUkxrdUkwM3Fva1lyQk9aLF9Td2NiR1JoMUN6OUdGd2dra2s4NHlFQlRKdlFnMGpPLDE0Njg0MTk1Ng0200V5phMMrF?s=ap',
-    test: 'https://epr-laps-frontend.test.cdp-int.defra.cloud/',
-    // test: 'https://dcidmtest.b2clogin.com/dcidmtest.onmicrosoft.com/oauth2/authresp',
+    // test:'https://epr-laps-frontend.test.cdp-int.defra.cloud/',
+    test: 'https://epr-laps-frontend.ext-test.cdp.defra.gov.uk/',
     dev: 'https://epr-laps-frontend.dev.cdp-int.defra.cloud/',
     confirmBankdetails:
       'https://epr-laps-frontend.test.cdp-int.defra.cloud/confirm?lang=en',
@@ -35,34 +16,38 @@ export const dataConfig = {
   credentials: {
     // Norfolk //
     confirmedCEO: 'aruna.krishnamurthy+NWAutomation@accenture.com',
-    confirmedHOF: 'aruna.krishnamurthy+nwhof@accenture.com',
-    confirmedHOW: 'aruna.krishnamurthy+NWCHoW@accenture.com',
-    confirmedWO: 'aruna.krishnamurthy+NWCWO@accenture.com',
-    confirmedFO: 'aruna.krishnamurthy+NWCFO@accenture.com',
+    confirmedHOF: 'aruna.krishnamurthy+nwchof@accenture.com',
+    confirmedHOW: 'aruna.krishnamurthy+nwHOW@accenture.com',
+    confirmedWO: 'aruna.krishnamurthy+NWWO@accenture.com',
+    confirmedFO: 'aruna.krishnamurthy+NWFO@accenture.com',
 
-    // Devon //
-    unconfirmedCEO: 'juhi.upreti@accenture.com',
-    unconfirmedHOF: 'juhi.upreti+hof@accenture.com',
-    unconfirmedHOW: 'aruna.krishnamurthy+devonhow@accenture.com',
-    unconfirmedWO: 'aruna.krishnamurthy+devonfowo@accenture.com',
-    unconfirmedFO: 'aruna.krishnamurthy+devonfowo@accenture.com',
-    // Non Wales //
-    ChangeHoFuser: 'aruna.krishnamurthy+testhof@accenture.com',
-    ChangeFOuser: 'aruna.krishnamurthy+foadmin@accenture.com',
-    // Wales //
-    ChangeHOFuser_Wales: 'aruna.krishnamurthy+foadmin@accenture.com',
-    // Wales //
-    confirmedWalesCEO: 'juhi.upreti+wales@accenture.com',
-    confirmedWalesHoF: 'tobi.omoyeni+hofpowys@accenture.com',
-    confirmedWalesHOW: 'aruna.krishnamurthy+NWCHoW@accenture.com',
-    confirmedWalesWO: 'aruna.krishnamurthy+NWCWO@accenture.com',
-    confirmedWalesFO: 'aruna.krishnamurthy+NWCFO@accenture.com',
-    // Wales //
-    unconfirmedWalesCEO: 'aruna.krishnamurthy+e2ewales@accenture.com',
-    unconfirmedWalesHoF: 'tobi.omoyeni+hofpo@accenture.com',
-    unconfirmedWalesHOW: 'aruna.krishnamurthy+devonhow@accenture.com',
-    unconfirmedWalesWO: 'aruna.krishnamurthy+devonfowo@accenture.com',
-    unconfirmedWalesFO: 'aruna.krishnamurthy+devonfowo@accenture.com'
+    // Manchester //
+    unconfirmedCEO: 'ManchesterCEO@defradev.onmicrosoft.com',
+    unconfirmedHOF: 'ManchesterHOF@defradev.onmicrosoft.com',
+    unconfirmedHOW: 'ManchesterHOW@defradev.onmicrosoft.com',
+    unconfirmedWO: 'ManchesterWO@defradev.onmicrosoft.com',
+    unconfirmedFO: 'ManchesterFO@defradev.onmicrosoft.com',
+
+    // Non Wales - Surrey County Council //
+    ChangeHoFuser: 'fifeHOF@defradev.onmicrosoft.com',
+    ChangeFOuser: 'fifeFO@defradev.onmicrosoft.com',
+
+    // Wales - Conwy County Borough Council //
+    ChangeHOFuser_Wales: 'aruna.krishnamurthy+testing@accenture.com',
+
+    // Wales - Powys County Council//
+    unconfirmedWalesCEO: 'juhi.upreti+wales@accenture.com',
+    unconfirmedWalesHoF: 'arnab.a.dhar@accenture.com',
+    unconfirmedWalesHOW: 'tobi.omoyeni+howpowys@accenture.com',
+    unconfirmedWalesWO: 'tobi.omoyeni+wopowys@accenture.com',
+    unconfirmedWalesFO: 'tobi.omoyeni+testfopowys@accenture.com',
+
+    // Wales - Torfaen Council //
+    confirmedWalesCEO: 'TorfaenCEO@defradev.onmicrosoft.com',
+    confirmedWalesHoF: 'TorfaenHOF@defradev.onmicrosoft.com',
+    confirmedWalesHOW: 'TorfaenHOW@defradev.onmicrosoft.com',
+    confirmedWalesWO: 'TorfaenWO@defradev.onmicrosoft.com',
+    confirmedWalesFO: 'TorfaenFO@defradev.onmicrosoft.com'
   },
 
   validdata: {
@@ -93,9 +78,12 @@ export const dataConfig = {
   },
 
   clientsecrets: {
-    CLIENT_ID: '09b1ad42-fd28-4480-9e70-5444ab2ce7a8',
-    CLIENT_SECRET: '8474ea0f-237c-4661-b90f-0d2301969d3f',
-    accessToken:
+    // POSTMAN_IDM_CLIENT_ID: process.env.POSTMAN_IDM_CLIENT_ID,
+    // POSTMAN_IDM_CLIENT_SECRET: process.env.POSTMAN_IDM_CLIENT_SECRET,
+    // POSTMAN_IDM_ACCESS_TOKEN:process.env.POSTMAN_IDM_ACCESS_TOKEN
+    POSTMAN_IDM_CLIENT_ID: '09b1ad42-fd28-4480-9e70-5444ab2ce7a8',
+    POSTMAN_IDM_CLIENT_SECRET: '8474ea0f-237c-4661-b90f-0d2301969d3f',
+    POSTMAN_IDM_ACCESS_TOKEN:
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIwOWIxYWQ0Mi1mZDI4LTQ0ODAtOWU3MC01NDQ0YWIyY2U3YTgiLCJpYXQiOjE3NzE2MDEyMTd9.3Klm4psmDMqH64pNO0RJ7V7M3J7_OfdyJt8EjH-qbYc'
   }
 }

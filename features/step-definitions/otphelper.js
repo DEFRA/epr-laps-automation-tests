@@ -103,11 +103,11 @@ function generateToken() {
   }
 
   const payload = {
-    iss: dataConfig.clientsecrets.CLIENT_ID,
+    iss: dataConfig.clientsecrets.POSTMAN_IDM_CLIENT_ID,
     iat: Math.round(Date.now() / 1000)
   }
 
-  const secret = dataConfig.clientsecrets.CLIENT_SECRET
+  const secret = dataConfig.clientsecrets.POSTMAN_IDM_CLIENT_SECRET
 
   const encodedHeader = base64url(JSON.stringify(header))
   const encodedPayload = base64url(JSON.stringify(payload))

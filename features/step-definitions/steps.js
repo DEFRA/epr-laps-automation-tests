@@ -114,6 +114,31 @@ When(/^I click "(.+)" link$/, async (linkText) => {
   // logger.info(`Screenshot saved (on success) to ${filePath}`)
 })
 
+When(/^I choose the "(.+)" link$/, async (linkText) => {
+  // const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
+  // const reportsDir = path.resolve(__dirname, '../../reports')
+  // Ensure reports directory exists
+  // if (!fs.existsSync(reportsDir)) {
+  //  fs.mkdirSync(reportsDir, { recursive: true })
+  // }
+  // const fileName = `click_${linkText}_${timestamp}.png`
+  // const filePath = path.join(reportsDir, fileName)
+  try {
+    const link = await SecurePage.manageLink(linkText)
+    await link.click()
+    logger.info(`Clicked the link: ${linkText}`)
+  } catch (error) {
+    logger.info(`Failed to click the link: ${linkText}`)
+    // await browser.saveScreenshot(filePath)
+    // logger.info(`Screenshot saved (on error) to ${filePath}`)
+    throw error
+  }
+
+  // Also take screenshot on success
+  // await browser.saveScreenshot(filePath)
+  // logger.info(`Screenshot saved (on success) to ${filePath}`)
+})
+
 //
 // -------------------------------
 //  CUCUMBER STEP DEFINITIONS
@@ -197,6 +222,29 @@ Then(
     } catch (e) {
       throw new Error(
         `Confirm bank details checkbox not clicked - ${e?.message || e}`
+      )
+    }
+  }
+)
+
+Then(
+  /^I "(check|uncheck)" the "([^"]*)" checkbox on the page$/,
+  async (action, checkboxName) => {
+    try {
+      const checkbox = await SecurePage.getCheckbox(checkboxName)
+
+      const isSelected = await checkbox.isSelected()
+
+      if (action === 'check' && !isSelected) {
+        await checkbox.click()
+      }
+
+      if (action === 'uncheck' && isSelected) {
+        await checkbox.click()
+      }
+    } catch (e) {
+      throw new Error(
+        `Unable to ${action} the ${checkboxName} checkbox - ${e?.message || e}`
       )
     }
   }
@@ -785,17 +833,17 @@ Then('I should see a field error message {string}', (s) => {
   // Write code here that turns the phrase above into concrete actions
 })
 
-When(/^I enter "([^"]*)" as account name$/, async (accountName) => {
-  await SecurePage.accountNameInput.addValue(accountName)
-})
+// When(/^I enter "([^"]*)" as account name$/, async (accountName) => {
+//  await SecurePage.accountNameInput.addValue(accountName)
+// })
 
-When(/^I enter "([^"]*)" as sort code$/, async (sortCode) => {
-  await SecurePage.sortCodeInput.addValue(sortCode)
-})
+// When(/^I enter "([^"]*)" as sort code$/, async (sortCode) => {
+//  await SecurePage.sortCodeInput.addValue(sortCode)
+// })
 
-When(/^I enter "([^"]*)" as account number$/, async (accountNumber) => {
-  await SecurePage.accountNumberInput.addValue(accountNumber)
-})
+// When(/^I enter "([^"]*)" as account number$/, async (accountNumber) => {
+//  await SecurePage.accountNumberInput.addValue(accountNumber)
+// })
 
 Then(/^I should see inline errors for the fields$/, async () => {
   const expectedInlineErrors = {

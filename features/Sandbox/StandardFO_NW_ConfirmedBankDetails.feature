@@ -1,4 +1,4 @@
-Feature: Accessing LAPs account - Journey7_HoW - Admin user- Non Wales_Unconfirmed
+Feature: Accessing LAPs account - Journey10_FO - Standard User- Non Wales_Confirmed
 
   Scenario: As a valid user, i must be able to login and securely access the LAPs account
 #LAPS-216 - IDM Sign In  
@@ -6,7 +6,7 @@ Feature: Accessing LAPs account - Journey7_HoW - Admin user- Non Wales_Unconfirm
     When I wait for "5" seconds
     Then I validate "What’s your local authority email address?" text on the page
     Then I validate "We will send a one-time passcode to this email address." text on the page
-    When I enter the email address for "HOW_AdminUnconfirmedBankdetails"
+    When I enter the email address for "FO_ConfirmedBankdetails"
     When I wait for "5" seconds
     Then I click on "Continue" button
     When I wait for "9" seconds
@@ -76,7 +76,7 @@ Feature: Accessing LAPs account - Journey7_HoW - Admin user- Non Wales_Unconfirm
     When I wait for "5" seconds
     Then I validate "What’s your local authority email address?" text on the page
     Then I validate "We will send a one-time passcode to this email address." text on the page
-    When I enter the email address for "HOW_AdminUnconfirmedBankdetails"
+    When I enter the email address for "FO_ConfirmedBankdetails"
     When I wait for "5" seconds
     Then I click on "Continue" button
     When I wait for "9" seconds
@@ -93,11 +93,10 @@ Feature: Accessing LAPs account - Journey7_HoW - Admin user- Non Wales_Unconfirm
     Then I validate banner with text "Beta This is a new service. Help us improve it and give your feedback (opens in new tab)." on the page
 #LAPS-167
     Then I validate warning text "The nominated Head of Finance will need to confirm your local authority's bank details." is not displayed on the page
-    Then I validate warning text "Unconfirmed" is displayed on the page
+    Then I validate warning text "Confirmed" is displayed on the page
     Then I validate "Account name,Sort code,Account number" fields are displayed in the documents page
     Then I validate "Sort code" field value contains "ending with"
     Then I validate "Account number" field value contains "ending with"
-    Then I cannot see "Change your local authority" link 
 
     Then I navigate to the "ConfirmBankDetails" page
     Then I am on the "Page not found" page
@@ -139,10 +138,10 @@ Feature: Accessing LAPs account - Journey7_HoW - Admin user- Non Wales_Unconfirm
     When I click "Your Defra account" link
     When I wait for "5" seconds
     Then I am on the "Your Defra account" page
-    And I can see "Manage account" link
+    And I cannot see "Manage account" link
     And I can see "Sign out" link
-    And I can see "Add" link
-    And I can see "Manage" link
+    And I cannot see "Add" link
+    And I cannot see "Manage" link
     #### how to validate a table
     ####validate the name
     #######LAPS-367 IDM Signout, LAPS-364- FSS Signout LAPS-162 LAPS Signout##########

@@ -1,4 +1,6 @@
-Feature: Accessing LAPs account - Journey17_HoF - Standard user - Wales_Unconfirmed Bank Details
+@regression
+
+Feature: Accessing LAPs account - Journey18_HoF - Standard user - Wales_Confirmed Bank Details
 
   Scenario: As a valid user, i must be able to login and securely access the LAPs account
 #LAPS-216 - IDM Sign In  
@@ -6,7 +8,7 @@ Feature: Accessing LAPs account - Journey17_HoF - Standard user - Wales_Unconfir
     When I wait for "9" seconds
     Then I validate "What’s your local authority email address?" text on the page
     Then I validate "We will send a one-time passcode to this email address." text on the page
-    When I enter the email address for "HOF_Unconfirmed_Wales"
+    When I enter the email address for "HOF_Confirmed_Wales"
     When I wait for "5" seconds
     Then I click on "Continue" button
     When I wait for "5" seconds
@@ -46,7 +48,7 @@ Feature: Accessing LAPs account - Journey17_HoF - Standard user - Wales_Unconfir
     When I click "Cymraeg" link
     Then I validate banner with text "Beta Mae hwn yn wasanaeth newydd. Helpwch ni i’w wella drwy roi eich adborth (yn agor mewn tab newydd)." on the page
 # the below step is to validate the council name translated to welsh - should make it parametrized by adding in data config post testing
-Then I validate "Cyngor Sir Powys" text on the page  
+Then I validate "Cyngor Bwrdeistref Sirol Torfaen" text on the page  
 #LAPS-227
     Then I validate "Dogfennau talu" text on the page
     Then I can see "Lawrlwytho" link
@@ -101,7 +103,7 @@ Then I validate "Cyngor Sir Powys" text on the page
     When I wait for "5" seconds
     Then I validate "What’s your local authority email address?" text on the page
     Then I validate "We will send a one-time passcode to this email address." text on the page
-    When I enter the email address for "HOF_Unconfirmed_Wales"
+    When I enter the email address for "HOF_Confirmed_Wales"
     When I wait for "5" seconds
     Then I click on "Continue" button
     When I wait for "5" seconds
@@ -113,18 +115,10 @@ Then I validate "Cyngor Sir Powys" text on the page
     And I wait for "9" seconds
 #LAPS-160 
     Then I am on the "Local Authority Payments (LAPs) home" page
-    Then I validate warning text "Please confirm your local authority's bank details." is displayed on the page
+    Then I validate warning text "Please confirm your local authority's bank details." is not displayed on the page
     When I click "Cymraeg" link
-    Then I validate "Mae angen i chi gadarnhau manylion banc eich awdurdod lleol" text on the page
-    Then I can see "Gweld a chadarnhau’r manylion banc" link
+    Then I validate "Mae angen i chi gadarnhau manylion banc eich awdurdod lleol" text is not displayed on the page
     When I click "English" link
-    Then I click "View and confirm bank details" link
-    Then I am on the "Confirm your local authority" page
-    When I click "Cymraeg" link
-    Then I validate "Mae angen i chi gadarnhau manylion banc eich awdurdod lleol" text on the page
-    Then I click "Yn ôl" link
-    Then I am on the "Hafan Taliadau Awdurdodau Lleol" page
-    Then I click "English" link
 ## Bank details ##
     When I click "Bank details" link
     When I wait for "5" seconds
@@ -132,19 +126,10 @@ Then I validate "Cyngor Sir Powys" text on the page
     #Beta Banner - LAPS-230
     Then I validate banner with text "Beta This is a new service. Help us improve it and give your feedback (opens in new tab)." on the page
 #LAPS-169
-    Then I validate warning text "Unconfirmed" is displayed on the page
+    Then I validate warning text "Confirmed" is displayed on the page
     Then I validate "Account name,Sort code,Account number" fields are displayed in the documents page
 #LAPS-308
-    Then I validate warning text "Please confirm your local authority's bank details." is displayed on the page
-    Then I click "Confirm bank details" link
-    Then I am on the "Confirm your local authority" page
-    #Then I confirm the bank details in the Confirm bank details page #Then I click on "Continue" button
-    Then I click "Back" link
-    Then I am on the "Local Authority Payments (LAPs) home" page
-    When I click "Bank details" link
-    When I wait for "5" seconds
-    Then I am on the "Bank details" page
-    #Then I validate warning text "Confirmed" is displayed on the page #Then I validate warning text "Please confirm your local authority's bank details." is not displayed on the page
+    Then I validate warning text "Please confirm your local authority's bank details." is not displayed on the page
     Then I click "Change your local authority" link
 #LAPS-308 LAPS-302 LAPS-300 LAPS-299 LAPS-298 LAPS-297 LAPS-296
     Then I can see "submit a request to update local authority’s bank details." link

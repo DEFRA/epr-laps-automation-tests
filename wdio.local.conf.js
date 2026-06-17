@@ -34,7 +34,7 @@ export const config = {
   // will be called from there.
   //
   specs: [
-    './features/MVPPhase1/LAPS-1125_Journey4_StandardHoF_NW_UnconfirmedBankDetails.feature'
+    './features/MVPPhase1/Smoke/LAPS_1123_Journey2_CEO_NW_ConfirmedBankDetails.feature'
   ],
   // Patterns to exclude.
   exclude: [
@@ -102,7 +102,7 @@ export const config = {
   //
   // If you only want to run your tests until a specific amount of tests have failed use
   // bail (default is 0 - don't bail, run all tests).
-  bail: 1,
+  bail: 0,
   //
   // Set a base URL in order to shorten url command calls. If your `url` parameter starts
   // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
@@ -167,6 +167,7 @@ export const config = {
       // works since version 1.1 of the wdio-cucumber-framework
       // './src/**/*.js',
     ],
+    // tagExpression: '@smoke',
     scenarioLevelReporter: false,
     order: 'defined'
   },

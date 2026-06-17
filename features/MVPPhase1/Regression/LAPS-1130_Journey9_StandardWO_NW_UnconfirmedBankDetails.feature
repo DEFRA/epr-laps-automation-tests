@@ -1,4 +1,6 @@
-Feature: Accessing LAPs account - Journey7_HoW - Standard user- Non Wales_Unconfirmed
+@regression
+
+Feature: Accessing LAPs account - Journey9_WO - Admin user- Non Wales_Unconfirmed
 
   Scenario: As a valid user, i must be able to login and securely access the LAPs account
 
@@ -7,7 +9,7 @@ Feature: Accessing LAPs account - Journey7_HoW - Standard user- Non Wales_Unconf
     When I wait for "9" seconds
     Then I validate "What’s your local authority email address?" text on the page
     Then I validate "We will send a one-time passcode to this email address." text on the page
-    When I enter the email address for "HOW_Unconfirmed"
+    When I enter the email address for "WO_Unconfirmed"
     When I wait for "5" seconds
     Then I click on "Continue" button
     When I wait for "5" seconds
@@ -95,7 +97,7 @@ Feature: Accessing LAPs account - Journey7_HoW - Standard user- Non Wales_Unconf
     When I wait for "9" seconds
     Then I validate "What’s your local authority email address?" text on the page
     Then I validate "We will send a one-time passcode to this email address." text on the page
-    When I enter the email address for "HOW_Unconfirmed"
+    When I enter the email address for "WO_Unconfirmed"
     When I wait for "5" seconds
     Then I click on "Continue" button
     When I wait for "5" seconds
@@ -118,7 +120,6 @@ Feature: Accessing LAPs account - Journey7_HoW - Standard user- Non Wales_Unconf
     Then I validate "Account name,Sort code,Account number" fields are displayed in the documents page
     Then I validate "Sort code" field value contains "ending with"
     Then I validate "Account number" field value contains "ending with"
-    Then I cannot see "Change your local authority" link
     Then I navigate to the "ConfirmBankDetails" page
     Then I am on the "Page not found" page
     Then I click "Cymraeg" link

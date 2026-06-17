@@ -1,12 +1,12 @@
-@smoke
-Feature: Accessing LAPs account - Journey2_CEO - Non Wales_Confirmed Bank Details
+@smoke  @regression
+Feature: Accessing LAPs account - Journey14_CEO_W_UnconfirmedBankDetails
 Scenario: As a valid user, i must be able to login and securely access the LAPs account
 #LAPS-216 IDM Sign in 
 Given I am on the home page
 When I wait for "9" seconds
 Then I validate "What’s your local authority email address?" text on the page
 Then I validate "We will send a one-time passcode to this email address." text on the page
-When I enter the email address for "CEO_Confirmed"
+When I enter the email address for "CEO_Unconfirmed_Wales"
 When I wait for "5" seconds
 Then I click on "Continue" button
 When I wait for "5" seconds
@@ -48,6 +48,8 @@ Then I validate "Local Authority Payments (LAPs) home" text on the page
     Then I validate banner with text "Beta This is a new service. Help us improve it and give your feedback (opens in new tab)." on the page
     When I click "Cymraeg" link
     Then I validate banner with text "Beta Mae hwn yn wasanaeth newydd. Helpwch ni i’w wella drwy roi eich adborth (yn agor mewn tab newydd)." on the page
+# the below step is to validate the council name translated to welsh - should make it parametrized by adding in data config post testing
+Then I validate "Cyngor Sir Powys" text on the page  
 #LAPS-227
     Then I validate "Dogfennau talu" text on the page
     Then I can see "Lawrlwytho" link
@@ -70,7 +72,7 @@ Then I validate "Local Authority Payments (LAPs) home" text on the page
     When I click "LAPs home" link
     Then I am on the "Local Authority Payments (LAPs) home" page
     When I wait for "5" seconds
-    
+
 #LAPS-162 Signout
 When I click "Sign out" link
 When I wait for "5" seconds
@@ -82,7 +84,7 @@ Then I am on the home page
 When I wait for "5" seconds
 Then I validate "What’s your local authority email address?" text on the page
 Then I validate "We will send a one-time passcode to this email address." text on the page
-When I enter the email address for "CEO_Confirmed"
+When I enter the email address for "CEO_Unconfirmed_Wales"
 When I wait for "5" seconds
 Then I click on "Continue" button
 When I wait for "5" seconds
@@ -101,8 +103,8 @@ Then I am on the "Bank details" page
 #Beta Banner - LAPS-230
 Then I validate banner with text "Beta This is a new service. Help us improve it and give your feedback (opens in new tab)." on the page
 #LAPS-167
-Then I validate "Your nominated Head of Finance must confirm these details." text is not displayed on the page
-Then I validate warning text "Confirmed" is displayed on the page
+Then I validate "Your nominated Head of Finance must confirm these details." text on the page
+Then I validate warning text "Unconfirmed" is displayed on the page
 Then I validate "Account name,Sort code,Account number" fields are displayed in the documents page
 Then I click "Change your local authority" link
 #LAPS-308 LAPS-302 LAPS-300 LAPS-299 LAPS-298 LAPS-297 LAPS-296
@@ -112,20 +114,12 @@ When I wait for "9" seconds
 Then I am on the "How it works" page
 Then I click on "Continue" button
 Then I am on the "New bank account details" page
-Then I fill in the invalid inputs in the bank details in the New bank account details page
-    Then I click on "Continue" button
-    #need to enter validating error message
-    Then I fill in the invalid length bank details in the New bank account details page
-    Then I click on "Continue" button
-    #need to enter validating error message
-    Then I do not enter any bank details in the New bank account details page
-    Then I click on "Continue" button
-    #need to enter validating error message
-    Then I fill in the new bank details in the New bank account details page
-    Then I click on "Continue" button
-    Then I am on the "Confirm new bank account details" page
-    And I validate "Requested by, Local authority, Account name,Sort code,Account number" fields are displayed in the documents page
-    Then I click on "Confirm and submit" button
+
+Then I fill in the new bank details in the New bank account details page
+Then I click on "Continue" button
+Then I am on the "Confirm new bank account details" page
+And I validate "Requested by, Local authority, Account name,Sort code,Account number" fields are displayed in the documents page
+Then I click on "Confirm and submit" button
 #LAPS-171
 Then I am on the "New bank account details submitted" page
 #LAPS-227

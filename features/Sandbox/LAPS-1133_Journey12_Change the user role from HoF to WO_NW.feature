@@ -120,17 +120,48 @@ Feature: Accessing LAPs account - LAPS-1133 Journey12_Change the user role from 
     Then I am on the "manylion banc" page
     When I click "English" link
     Then I validate "Bank details" text on the page
-    When I click "LAPs home" link
-    Then I am on the "Local Authority Payments (LAPs) home" page
-    When I wait for "5" seconds
+
+    Then I navigate to the "ConfirmBankDetails" page
+    Then I am on the "Confirm your local authority" page
+    Then I confirm the bank details in the Confirm bank details page
+    Then I click on "Continue" button
+    Then I am on the "Bank details confirmed" page
+
 #################################Your Defra Account link #######################################################
     #Your defra account - LAPS-202
     When I click "Your Defra account" link
     When I wait for "5" seconds
     Then I am on the "Your Defra account" page
     And I can see "Sign out" link
-    ##write steps from new UI to change the role as WO
 
+#################################Change User Role in Your Defra Account Page ##################################    
+
+ When I choose the "Manage" link
+ And I click "Manage team access" link
+ When I wait for "9" seconds
+ Then I am on the "Manage team access" page
+ Then I click on "Continue" button
+ And I choose the "Manage" link
+ Then I can see "Change service role" link 
+ Then I am on the "What role will they have on this service?" page
+Then I "uncheck" the "Head of Finance" checkbox on the page
+And I "check" the "Waste Officer" checkbox on the page
+When I wait for "9" seconds
+Then I click "Manage service Local Authority Payments" link
+
+
+
+
+
+
+
+
+
+
+
+
+    
+#################################Your Defra Account link #######################################################
 #LAPS-160 
     Then I am on the "Local Authority Payments (LAPs) home" page
 #LAPS-293 
@@ -198,7 +229,6 @@ Feature: Accessing LAPs account - LAPS-1133 Journey12_Change the user role from 
     Then I validate "Account name,Sort code,Account number" fields are displayed in the documents page
     Then I validate "Sort code" field value contains "ending with"
     Then I validate "Account number" field value contains "ending with"
-    Then I cannot see "Change your local authority" link 
 
     Then I navigate to the "ConfirmBankDetails" page
     Then I am on the "Page not found" page

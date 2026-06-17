@@ -1,25 +1,22 @@
-Feature: Accessing LAPs account -  LAPS- 1143 Journey23_FO - Standard User- Wales_Confirmed
+Feature: Accessing LAPs account - Journey8_WO - Standard user- Non Wales_Confirmed
 
   Scenario: As a valid user, i must be able to login and securely access the LAPs account
-
-#LAPS-216 IDM Sign in 
+#LAPS-216 - IDM Sign In  
     Given I am on the home page
-    When I wait for "9" seconds
+    When I wait for "5" seconds
     Then I validate "What’s your local authority email address?" text on the page
     Then I validate "We will send a one-time passcode to this email address." text on the page
-    When I enter the email address for "FO_Confirmed_Wales"
+    When I enter the email address for "WO_ConfirmedBankdetails"
     When I wait for "5" seconds
     Then I click on "Continue" button
-    When I wait for "5" seconds
-    When I Trigger the OP API using valid cred
-    Then I extract the OTP from API response and enter it in UI
-    And I wait for "9" seconds
-    Then I click on "Continue" button
-    And I wait for "9" seconds
+    When I wait for "9" seconds
+    When I wait for "9" seconds
+    When I wait for "9" seconds
+    When I wait for "9" seconds
 #LAPS-160 
     Then I am on the "Local Authority Payments (LAPs) home" page
 #LAPS-293 
-   # Then I click on "Hide cookie message" button in "Cookies on Local Authority Payments" section
+    Then I click on "Hide cookie message" button in "Cookies on Local Authority Payments" section
     Then I can see "Payment documents" link
     Then I can see "Bank details" link
     Then I can see "Get help and guidance" link
@@ -37,16 +34,14 @@ Feature: Accessing LAPs account -  LAPS- 1143 Journey23_FO - Standard User- Wale
     Then the grid titles should match the following: Dogfennau talu,Manylion banc, Cael help a chanllawiau
     When I click "English" link
     Then I validate "Local Authority Payments (LAPs) home" text on the page
+    #write a step for dynamic LA name 
 ## Payment documents ##
     When I click "Payment documents" link
     Then I am on the "Payment documents" page
-    And I wait for "9" seconds
-    #LAPS-230
+#LAPS-230
     Then I validate banner with text "Beta This is a new service. Help us improve it and give your feedback (opens in new tab)." on the page
     When I click "Cymraeg" link
     Then I validate banner with text "Beta Mae hwn yn wasanaeth newydd. Helpwch ni i’w wella drwy roi eich adborth (yn agor mewn tab newydd)." on the page
- # the below step is to validate the council name translated to welsh - should make it parametrized by adding in data config post testing
-Then I validate "Cyngor Sir Powys" text on the page
 #LAPS-227
     Then I validate "Dogfennau talu" text on the page
     Then I can see "Lawrlwytho" link
@@ -58,36 +53,36 @@ Then I validate "Cyngor Sir Powys" text on the page
     Then I validate warning text "For the 2025 to 2026 financial year, there will be a single payment covering quarters 1 and 2." is displayed on the page
     Then I validate that Payment documents table is displayed
     When I click sort link in the Payment table
+    Then I select the year "2024 to 2025" from the dropdown
+    Then I validate warning text "For the 2025 to 2026 financial year, there will be a single payment covering quarters 1 and 2." is not displayed on the page
+    And I click sort link in the Payment table
     Then I select the year "2025 to 2026" from the dropdown
     And I validate warning text "For the 2025 to 2026 financial year, there will be a single payment covering quarters 1 and 2." is displayed on the page
     Then I wait for "5" seconds
-
-    Then I validate that table is displayed
-    Then I capture all document names and download each document
-    Then I download and view each document sequentially
-
+#LAPS-371
+    Then I click on "Download" link in the table for "Remittance letter Q3"
+    Then I click on "View (opens in new tab)" link in the table for "Remittance letter Q3" and validate PDF opens
     When I click "LAPs home" link
     Then I am on the "Local Authority Payments (LAPs) home" page
     When I wait for "5" seconds
-
 #LAPS-162 Signout
     When I click "Sign out" link
     When I wait for "5" seconds
     Then I am on the "You are now signed out of Local Authority Payments account" page
 #LAPS-216 - IDM Sign In  
-    Given I am on the home page
-    When I wait for "9" seconds
+    When I click on "Sign in" button
+    When I wait for "5" seconds
+    Then I am on the home page
+    When I wait for "5" seconds
     Then I validate "What’s your local authority email address?" text on the page
     Then I validate "We will send a one-time passcode to this email address." text on the page
-    When I enter the email address for "FO_Confirmed_Wales"
+    When I enter the email address for "WO_ConfirmedBankdetails"
     When I wait for "5" seconds
     Then I click on "Continue" button
-    When I wait for "5" seconds
-    When I Trigger the OP API using valid cred
-    Then I extract the OTP from API response and enter it in UI
-    And I wait for "9" seconds
-    Then I click on "Continue" button
-    And I wait for "9" seconds
+    When I wait for "9" seconds
+    When I wait for "9" seconds
+    When I wait for "9" seconds
+    When I wait for "9" seconds
 #LAPS-160 
     Then I am on the "Local Authority Payments (LAPs) home" page
 ## Bank details ##
@@ -102,18 +97,20 @@ Then I validate "Cyngor Sir Powys" text on the page
     Then I validate "Account name,Sort code,Account number" fields are displayed in the documents page
     Then I validate "Sort code" field value contains "ending with"
     Then I validate "Account number" field value contains "ending with"
-    Then I cannot see "Change your local authority" link
+
+
     Then I navigate to the "ConfirmBankDetails" page
     Then I am on the "Page not found" page
     Then I click "Cymraeg" link
     And I am on the "Heb ddod o hyd i" page
     Then I navigate to the "UpdateBankDetails" page
     Then I am on the "Heb ddod o hyd i" page
-    Then I click "English" link
+    Then I click "English" link 
     Then I navigate to the "CheckBankDetails" page
     Then I am on the "Page not found" page
     Then I navigate to the "SubmitBankDetails" page
     Then I am on the "Page not found" page
+
     Then I navigate to the "LAPS" page
     Then I am on the "Local Authority Payments (LAPs) home" page
     When I wait for "5" seconds
@@ -138,12 +135,25 @@ Then I validate "Cyngor Sir Powys" text on the page
     Then I am on the "Local Authority Payments (LAPs) home" page
     When I wait for "5" seconds
     #################################Your Defra Account link #######################################################
-#Your defra account - LAPS-202
+    #Your defra account - LAPS-202
     When I click "Your Defra account" link
     When I wait for "5" seconds
     Then I am on the "Your Defra account" page
+    And I cannot see "Manage account" link
     And I can see "Sign out" link
-#LAPS-367 IDM Signout, LAPS-364- FSS Signout LAPS-162 LAPS Signout
+    And I cannot see "Add" link
+    And I cannot see "Manage" link
+    #### how to validate a table
+    ####validate the name
+    #######LAPS-367 IDM Signout, LAPS-364- FSS Signout LAPS-162 LAPS Signout##########
     When I click "Sign out" link
     When I wait for "5" seconds
+    #Then I validate "You are now signed out of Local Authority Payments account" text on the page    
     Then I validate "Your Defra account" text on the page
+
+    Examples:
+      | accountName | sortCode | accountNumber | field       | errorMessage             |
+      |             |   123456 |      12345678 | accountName | Account name is required |
+#   tes£$%&((&)| 123456| 12345678|accountName  | Account name contains invalid characters |
+# testuseraccount | 12344456| 12345678 | sortCode     | Sort code must be 6 digits               |
+#  testuseraccount | 123456| 12345456678  | accountNumber| Account number must be 8 digits          |
