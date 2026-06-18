@@ -108,11 +108,13 @@ function generateToken() {
   }
 
   const secret = dataConfig.clientsecrets.POSTMAN_IDM_CLIENT_SECRET
+  logger.info(`Client secret is displayed: ${secret}`)
 
   const encodedHeader = base64url(JSON.stringify(header))
   const encodedPayload = base64url(JSON.stringify(payload))
 
   const token = `${encodedHeader}.${encodedPayload}`
+  logger.info(`token is generated: ${token}`)
 
   const signature = crypto
     .createHmac('sha256', secret)
