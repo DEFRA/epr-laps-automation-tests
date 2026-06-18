@@ -17,6 +17,37 @@ import assert from 'assert'
 // const __filename = fileURLToPath(import.meta.url)
 // const __dirname = path.dirname(__filename)
 
+Given(/^I am on the Devhome page$/, async () => {
+  await browser.maximizeWindow()
+  await browser.url(dataConfig.expectedUrls.dev)
+  // browser.pause(10)
+
+  const screenshot = await browser.takeScreenshot()
+  allureReporter.addAttachment('Screenshot', screenshot, 'image/png')
+})
+
+When(
+  /^I click "([^"]*)" against the email address "([^"]*)"$/,
+  async (linkText, emailAddress) => {
+    const row = await $(
+      `//tr[th[contains(normalize-space(), "${emailAddress}")]]`
+    )
+    await row.waitForExist({ timeout: 5000 })
+    const link = await $(
+      `//tr[th[contains(normalize-space(), "${emailAddress}")]]/td/a[normalize-space()="${linkText}"]`
+    )
+    await link.waitForExist({ timeout: 5000 })
+    await link.click()
+  }
+)
+
+Then('I select the organisation', async () => {
+  const organisationRadio = await $('//*[@id="relationshipId"]')
+  await organisationRadio.click()
+})
+
+//  Below are for end to end journey steps //
+
 Given(/^I am on the home page$/, async () => {
   await browser.maximizeWindow()
   await browser.url(dataConfig.expectedUrls.test)

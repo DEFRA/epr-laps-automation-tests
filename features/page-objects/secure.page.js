@@ -81,7 +81,7 @@ class SecurePage extends page {
 
   paraText(paraName) {
     return $(
-      `//*[@id="main-content"]//p[contains(normalize-space(.),"${paraName}")]|//*[@id="main-content"]//span[contains(normalize-space(.),"${paraName}")] |//*[contains(@class,'govuk-heading-m') and contains(.,'${paraName}')]|//*[@id="header"]|//*[@id="replacementConfirmEmail"]/p|//span[contains(.,'${paraName}')]|//*[@id="main-content"]//h1[normalize-space(.)='${paraName}']`
+      `//*[@id="main-content"]//p[contains(normalize-space(.),"${paraName}")]|//*[@id="main-content"]//span[contains(normalize-space(.),"${paraName}")] |//*[contains(@class,'govuk-heading-m') and contains(.,'${paraName}')]|//*[@id="header"]|//*[@id="replacementConfirmEmail"]/p|//span[contains(.,'${paraName}')]|//*[@id="main-content"]/div[2]/div/div/table/caption[contains(.,'${paraName}')]|//*[@id="main-content"]//h1[normalize-space(.)='${paraName}']`
     )
   }
 
