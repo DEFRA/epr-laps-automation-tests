@@ -34,7 +34,7 @@ export const config = {
   // will be called from there.
   //
   specs: [
-    './features/MVPPhase1/Smoke/LAPS_1123_Journey2_CEO_NW_ConfirmedBankDetails.feature'
+    './features/MVPPhase1/Smoke/LAPS-1125_Journey4_StandardHoF_NW_UnconfirmedBankDetails.feature'
   ],
   // Patterns to exclude.
   exclude: [
