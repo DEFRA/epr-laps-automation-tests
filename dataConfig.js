@@ -30,7 +30,7 @@ export const dataConfig = {
 
     // Non Wales - Surrey County Council //
     ChangeHoFuser: 'fifeHOF@defradev.onmicrosoft.com',
-    ChangeFOuser: 'fifeFO@defradev.onmicrosoft.com',
+    ChangeFOuser: 'FalkirkFO@defradev.onmicrosoft.com',
 
     // Wales - Conwy County Borough Council //
     ChangeHOFuser_Wales: 'aruna.krishnamurthy+testing@accenture.com',
