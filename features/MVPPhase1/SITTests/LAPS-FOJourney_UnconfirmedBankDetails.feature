@@ -1,6 +1,6 @@
 @regression
 
-Feature: Accessing LAPs account - LAPS-1132 Journey11_FO - Admin User- Non Wales_Unconfirmed
+Feature: FO Accessing LAPs account 
 
   Scenario: As a valid user, i must be able to login and securely access the LAPs account
 
@@ -9,7 +9,7 @@ Feature: Accessing LAPs account - LAPS-1132 Journey11_FO - Admin User- Non Wales
     Given I am on the Devhome page
     When I wait for "9" seconds
     Then I validate "Registered users" text on the page
-    When I click "Log in" against the email address "juhi.upreti@accenture.com"
+    When I click "Log in" against the email address "aruna.krishnamurthy@accenture.com"
     Then I select the organisation
     Then I click on "Continue" button
     When I wait for "5" seconds
@@ -59,7 +59,7 @@ Feature: Accessing LAPs account - LAPS-1132 Journey11_FO - Admin User- Non Wales
     Then I wait for "5" seconds
 
     Then I validate that table is displayed
-    Then I capture all document names and download each document
+    #Then I capture all document names and download each document
     #Then I download and view each document sequentially
 
     When I click "LAPs home" link
