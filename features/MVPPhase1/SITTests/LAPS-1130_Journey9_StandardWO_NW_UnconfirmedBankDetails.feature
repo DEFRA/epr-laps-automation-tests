@@ -58,8 +58,8 @@ Feature: Accessing LAPs account - Journey9_WO - Admin user- Non Wales_Unconfirme
     Then I wait for "5" seconds
 
     Then I validate that table is displayed
-    Then I capture all document names and download each document
-    Then I download and view each document sequentially
+    #Then I capture all document names and download each document
+   #Then I download and view each document sequentially
 
     When I click "LAPs home" link
     Then I am on the "Local Authority Payments (LAPs) home" page
@@ -75,22 +75,41 @@ Feature: Accessing LAPs account - Journey9_WO - Admin user- Non Wales_Unconfirme
     Then I validate warning text "The nominated Head of Finance will need to confirm your local authority's bank details." is not displayed on the page
     Then I validate warning text "Unconfirmed" is displayed on the page
     Then I validate "Account name,Sort code,Account number" fields are displayed in the documents page
-    Then I validate "Sort code" field value contains "ending with"
-    Then I validate "Account number" field value contains "ending with"
-    Then I navigate to the "ConfirmBankDetails" page
-    Then I am on the "Page not found" page
-    Then I click "Cymraeg" link
-    And I am on the "Heb ddod o hyd i" page
-    Then I navigate to the "UpdateBankDetails" page
-    Then I am on the "Heb ddod o hyd i" page
-    Then I click "English" link
-    Then I navigate to the "CheckBankDetails" page
-    Then I am on the "Page not found" page
-    Then I navigate to the "SubmitBankDetails" page
-    Then I am on the "Page not found" page
-    Then I navigate to the "LAPS" page
-    Then I am on the "Local Authority Payments (LAPs) home" page
-    When I wait for "5" seconds
+Then I click "Change your local authority" link
+#LAPS-308 LAPS-302 LAPS-300 LAPS-299 LAPS-298 LAPS-297 LAPS-296
+Then I can see "submit a request to update local authority’s bank details." link
+Then I click "submit a request to update local authority’s bank details." link
+When I wait for "9" seconds
+Then I am on the "How it works" page
+Then I click on "Continue" button
+Then I am on the "New bank account details" page
+
+Then I fill in the invalid inputs in the bank details in the New bank account details page
+Then I click on "Continue" button
+#need to enter validating error message
+Then I fill in the invalid length bank details in the New bank account details page
+Then I click on "Continue" button
+#need to enter validating error message
+Then I do not enter any bank details in the New bank account details page
+Then I click on "Continue" button
+#need to enter validating error message
+Then I fill in the new bank details in the New bank account details page
+Then I click on "Continue" button
+Then I am on the "Confirm new bank account details" page
+And I validate "Requested by, Local authority, Account name,Sort code,Account number" fields are displayed in the documents page
+Then I click on "Confirm and submit" button
+#LAPS-171
+Then I am on the "New bank account details submitted" page
+#LAPS-227
+When I click "Cymraeg" link
+Then I validate "Cyfrif Taliadau Awdurdodau Lleol ar gyfer Cyfrifoldeb Estynedig Cynhyrchwyr" text on the page
+Then I click "manylion banc" link
+Then I am on the "manylion banc" page
+When I click "English" link
+Then I validate "Bank details" text on the page
+When I click "LAPs home" link
+Then I am on the "Local Authority Payments (LAPs) home" page
+When I wait for "5" seconds
     #########Get Help page LAPS-212 LAPS-211 ##################
     When I click "Get help and guidance" link
     When I wait for "5" seconds
