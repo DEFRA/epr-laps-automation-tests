@@ -1,6 +1,6 @@
 export const dataConfig = {
   expectedUrls: {
-    // test: 'https://epr-laps-frontend.test.cdp-int.defra.cloud/',
+    test: 'https://epr-laps-frontend.test.cdp-int.defra.cloud/',
     // test: 'https://epr-laps-frontend.ext-test.cdp.defra.gov.uk/',
     dev: 'https://epr-laps-frontend.dev.cdp-int.defra.cloud/',
     confirmBankdetails:
