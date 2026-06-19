@@ -130,7 +130,7 @@ function generateToken() {
 /// /  https://api.notifications.service.gov.uk/v2/notifications
 
 When('I Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
-  logger.info('STEP STARTED')
+  logger.info('API STEP STARTED')
 
   const pollIntervalMs = 2000 // check every 2 seconds
   const pollDurationMs = 30000 // poll for up to 30 seconds
@@ -143,7 +143,7 @@ When('I Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
   while (Date.now() < endTime) {
     try {
       const token = generateToken()
-
+      logger.info(`Generated token is: ${token}`)
       const response = await axios.get(
         'https://api.notifications.service.gov.uk/v2/notifications',
         {
@@ -157,7 +157,7 @@ When('I Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
           validateStatus: () => true
         }
       )
-
+      logger.info(`API response status is generated: ${response}`)
       const responseArray = Array.isArray(response.data.notifications)
         ? response.data.notifications
         : []

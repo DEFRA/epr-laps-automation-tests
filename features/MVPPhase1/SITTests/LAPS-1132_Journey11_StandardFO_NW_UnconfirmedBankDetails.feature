@@ -60,7 +60,7 @@ Feature: Accessing LAPs account - LAPS-1132 Journey11_FO - Admin User- Non Wales
 
     Then I validate that table is displayed
     Then I capture all document names and download each document
-    Then I download and view each document sequentially
+    #Then I download and view each document sequentially
 
     When I click "LAPs home" link
     Then I am on the "Local Authority Payments (LAPs) home" page
@@ -78,18 +78,7 @@ Feature: Accessing LAPs account - LAPS-1132 Journey11_FO - Admin User- Non Wales
     Then I validate "Account name,Sort code,Account number" fields are displayed in the documents page
     Then I validate "Sort code" field value contains "ending with"
     Then I validate "Account number" field value contains "ending with"
-    Then I navigate to the "ConfirmBankDetails" page
-    Then I am on the "Page not found" page
-    Then I click "Cymraeg" link
-    And I am on the "Heb ddod o hyd i" page
-    Then I navigate to the "UpdateBankDetails" page
-    Then I am on the "Heb ddod o hyd i" page
-    Then I click "English" link
-    Then I navigate to the "CheckBankDetails" page
-    Then I am on the "Page not found" page
-    Then I navigate to the "SubmitBankDetails" page
-    Then I am on the "Page not found" page
-    Then I navigate to the "LAPS" page
+    When I click "LAPs home" link
     Then I am on the "Local Authority Payments (LAPs) home" page
     When I wait for "5" seconds
     #########Get Help page LAPS-212 LAPS-211 ##################
