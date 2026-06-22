@@ -146,16 +146,12 @@ When(/^I click "(.+)" link$/, async (linkText) => {
 })
 
 When(/^I choose the "(.+)" link$/, async (linkText) => {
-  // const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
-  // const reportsDir = path.resolve(__dirname, '../../reports')
-  // Ensure reports directory exists
-  // if (!fs.existsSync(reportsDir)) {
-  //  fs.mkdirSync(reportsDir, { recursive: true })
-  // }
-  // const fileName = `click_${linkText}_${timestamp}.png`
-  // const filePath = path.join(reportsDir, fileName)
   try {
     const link = await SecurePage.manageLink(linkText)
+    logger.info(`linkText = [${linkText}]`)
+    await link.waitForExist({ timeout: 5000 })
+
+    logger.info('Displayed:', await link.isDisplayed())
     await link.click()
     logger.info(`Clicked the link: ${linkText}`)
   } catch (error) {

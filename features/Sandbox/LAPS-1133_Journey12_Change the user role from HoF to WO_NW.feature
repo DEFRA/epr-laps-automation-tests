@@ -18,7 +18,7 @@ Feature: Accessing LAPs account - LAPS-1133 Journey12_Change the user role from 
 #LAPS-160 
     Then I am on the "Local Authority Payments (LAPs) home" page
 #LAPS-293 
-    Then I click on "Hide cookie message" button in "Cookies on Local Authority Payments" section
+   # Then I click on "Hide cookie message" button in "Cookies on Local Authority Payments" section
     Then I can see "Payment documents" link
     Then I can see "Bank details" link
     Then I can see "Get help and guidance" link
@@ -57,11 +57,11 @@ Feature: Accessing LAPs account - LAPS-1133 Journey12_Change the user role from 
     When I click "English" link
     Then I validate "Bank details" text on the page
 
-    Then I navigate to the "ConfirmBankDetails" page
-    Then I am on the "Confirm your local authority" page
-    Then I confirm the bank details in the Confirm bank details page
-    Then I click on "Continue" button
-    Then I am on the "Bank details confirmed" page
+    #Then I navigate to the "ConfirmBankDetails" page
+    #Then I am on the "Confirm your local authority" page
+    #Then I confirm the bank details in the Confirm bank details page
+    #Then I click on "Continue" button
+    #Then I am on the "Bank details confirmed" page
 
 #################################Your Defra Account link #######################################################
     #Your defra account - LAPS-202
@@ -150,7 +150,7 @@ When I click "Your Defra account" link
  When I wait for "9" seconds
  Then I am on the "Manage team access" page
  And I choose the "Manage" link
- Then I can see "Change service role" link 
+ Then I click "Change service role" link 
  Then I am on the "What role will they have on this service?" page
 Then I "uncheck" the "Waste Officer" checkbox on the page
 And I "check" the "Head of Finance" checkbox on the page

@@ -30,7 +30,7 @@ class SecurePage extends page {
       : `'${linkText}'`
 
     return $(
-      `//span[contains(., "${safeText}")] |//*[contains(@class,'govuk-table') and contains(.,"${safeText}")]| //*[@id="main-content"]//span[contains(.,"${safeText}")]|//span[contains(text(), ${safeText})]`
+      `//span[contains(., "${safeText}")]| //a[contains(text(), "${safeText}")]  |//*[contains(@class,'govuk-table') and contains(.,"${safeText}")]| //*[@id="main-content"]//span[contains(.,"${safeText}")]|//span[contains(text(), ${safeText})]`
     )
   }
 
