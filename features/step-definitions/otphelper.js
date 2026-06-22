@@ -227,17 +227,46 @@ Then(
   { timeout: 60000 },
   async () => {
     const email = global.currentTestEmail
-    const responses = global.apiResponses || []
 
-    logger.info('Email extracted is:', email)
-    logger.info('Response for OTP code is:', responses)
+    logger.info(`Current email: [${email}]`)
 
     if (!email) {
       throw new Error('No email stored from previous step')
     }
 
-    // Find notification for this email
-    const notification = responses.find((n) => n.email_address === email)
+    // Wait until notification for this email exists
+    await browser.waitUntil(
+      () => {
+        const responses = global.apiResponses || []
+
+        logger.info(
+          `Checking notifications. Current count: ${responses.length}`
+        )
+
+        return responses.some(
+          (r) =>
+            r.email_address?.trim().toLowerCase() === email.trim().toLowerCase()
+        )
+      },
+      {
+        timeout: 60000,
+        interval: 2000,
+        timeoutMsg: `No notification found for email ${email} after 60 seconds`
+      }
+    )
+
+    const responses = global.apiResponses || []
+
+    logger.info(`Responses count: ${responses.length}`)
+
+    responses.forEach((r, index) => {
+      logger.info(`Response ${index}: email=[${r.email_address}]`)
+    })
+
+    const notification = responses.find(
+      (r) =>
+        r.email_address?.trim().toLowerCase() === email.trim().toLowerCase()
+    )
 
     if (!notification) {
       throw new Error(`No notification found for email ${email}`)
@@ -245,8 +274,8 @@ Then(
 
     const body = notification.body || ''
 
-    // Extract 6 digit code
-    // const match = body.match(/#(\d{6})/);
+    logger.info(`Notification body: ${body}`)
+
     const match = body.match(/\b(\d{6})\b/)
 
     if (!match) {
@@ -257,8 +286,8 @@ Then(
 
     logger.info(`✅ Extracted OTP: ${otp}`)
 
-    // Enter OTP in UI
     const otpInput = await SecurePage.getinputbyid('verificationCode')
+
     await otpInput.waitForExist({ timeout: 10000 })
     await otpInput.setValue(otp)
   }
