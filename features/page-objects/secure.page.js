@@ -30,7 +30,7 @@ class SecurePage extends page {
       : `'${linkText}'`
 
     return $(
-      `//span[contains(., "${safeText}")]| //a[contains(text(), "${safeText}")]  |//*[contains(@class,'govuk-table') and contains(.,"${safeText}")]| //*[@id="main-content"]//span[contains(.,"${safeText}")]|//span[contains(text(), ${safeText})]`
+      `//span[contains(., "${safeText}")]| //a[contains(text(), ${safeText})]  |//*[contains(@class,'govuk-table') and contains(.,"${safeText}")]| //*[@id="main-content"]//span[contains(.,"${safeText}")]|//span[contains(text(), ${safeText})]`
     )
   }
 
@@ -204,8 +204,6 @@ class SecurePage extends page {
     return await Promise.all(items.map((el) => el.getText()))
   }
 
-  /// //////////////////
-
   getdocsTable() {
     return $(`//*[@id="main-content"]/table`)
   }
@@ -213,8 +211,6 @@ class SecurePage extends page {
   getNoTableMessage() {
     return $('//div[@data-testid="no-documents-message"]')
   }
-
-  /// ///////////////////////
 }
 
 export default new SecurePage()
