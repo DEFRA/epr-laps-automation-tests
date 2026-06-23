@@ -1,7 +1,8 @@
-Feature: Accessing LAPs account - LAPS-1133 Journey12_Change the user role from Admin HoF to Admin WO- Non Wales
+Feature: Accessing LAPs account - LAPS-1145 Journey25_Change the user role from HoF to WO- Wales
 
   Scenario: As a valid user, i must be able to login and securely access the LAPs account
 #LAPS-216 - IDM Sign In  
+   #LAPS-216 - IDM Sign In  
     Given I am on the home page
     When I wait for "9" seconds
     Then I validate "What’s your local authority email address?" text on the page
@@ -18,7 +19,7 @@ Feature: Accessing LAPs account - LAPS-1133 Journey12_Change the user role from 
 #LAPS-160 
     Then I am on the "Local Authority Payments (LAPs) home" page
 #LAPS-293 
-   # Then I click on "Hide cookie message" button in "Cookies on Local Authority Payments" section
+    #Then I click on "Hide cookie message" button in "Cookies on Local Authority Payments" section
     Then I can see "Payment documents" link
     Then I can see "Bank details" link
     Then I can see "Get help and guidance" link
@@ -57,11 +58,11 @@ Feature: Accessing LAPs account - LAPS-1133 Journey12_Change the user role from 
     When I click "English" link
     Then I validate "Bank details" text on the page
 
-    #Then I navigate to the "ConfirmBankDetails" page
-    #Then I am on the "Confirm your local authority" page
-    #Then I confirm the bank details in the Confirm bank details page
-    #Then I click on "Continue" button
-    #Then I am on the "Bank details confirmed" page
+    Then I navigate to the "ConfirmBankDetails" page
+    Then I am on the "Confirm your local authority" page
+    Then I confirm the bank details in the Confirm bank details page
+    Then I click on "Continue" button
+    Then I am on the "Bank details confirmed" page
 
 #################################Your Defra Account link #######################################################
     #Your defra account - LAPS-202
@@ -76,17 +77,18 @@ Feature: Accessing LAPs account - LAPS-1133 Journey12_Change the user role from 
  And I click "Manage team access" link
  When I wait for "9" seconds
  Then I am on the "Manage team access" page
- And I choose the "Manage" link
+ And I choose the "Manage" link 
  Then I can see "Change service role" link 
+ And I choose the "Change service role" link
  Then I am on the "What role will they have on this service?" page
 Then I "uncheck" the "Head of Finance" checkbox on the page
 And I "check" the "Waste Officer" checkbox on the page
 Then I click on "Continue" button
 When I wait for "9" seconds
 When I wait for "9" seconds
-When I click "Sign out" link
-When I wait for "5" seconds
-Then I validate "Your Defra account" text on the page
+#When I click "Sign out" link
+#When I wait for "5" seconds
+#Then I validate "Your Defra account" text on the page
 ## Navigate to LAPS page ##
 Then I click "Manage service Local Authority Payments" link
 Then I am on the "Local Authority Payments (LAPs) home" page
@@ -149,17 +151,18 @@ When I click "Your Defra account" link
  And I click "Manage team access" link
  When I wait for "9" seconds
  Then I am on the "Manage team access" page
- And I choose the "Manage" link
- Then I click "Change service role" link 
+ And I choose the "Manage" link 
+ Then I can see "Change service role" link
+ And I choose the "Change service role" link
  Then I am on the "What role will they have on this service?" page
-Then I "uncheck" the "Waste Officer" checkbox on the page
-And I "check" the "Head of Finance" checkbox on the page
-Then I click on "Continue" button
-When I wait for "9" seconds
-When I wait for "9" seconds
-When I click "Sign out" link
-When I wait for "5" seconds
-Then I validate "Your Defra account" text on the page
+ Then I "uncheck" the "Waste Officer" checkbox on the page
+ And I "check" the "Head of Finance" checkbox on the page
+ Then I click on "Continue" button
+ When I wait for "9" seconds
+ When I wait for "9" seconds
+#When I click "Sign out" link
+#When I wait for "5" seconds
+#Then I validate "Your Defra account" text on the page
 ## Navigate to LAPS page ##
 Then I click "Manage service Local Authority Payments" link
 Then I am on the "Local Authority Payments (LAPs) home" page
