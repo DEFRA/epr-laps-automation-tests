@@ -129,7 +129,7 @@ function generateToken() {
   return `${token}.${signature}`
 }
 
-When('Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
+When('I Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
   logger.info('API STEP STARTED')
 
   const pollIntervalMs = 2000 // check every 2 seconds
@@ -294,7 +294,7 @@ Then(
   }
 )
 
-When('I Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
+When('Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
   logger.info('API STEP STARTED')
 
   const token = generateToken()
