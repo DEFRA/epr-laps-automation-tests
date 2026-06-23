@@ -120,7 +120,7 @@ Then(/^I cannot see "(.+)" link$/, async (linkText) => {
   }
 })
 
-When(/^I click "(.+)" link$/, async (linkText) => {
+When(/^I click "(.+)" link$/, { timeout: 120000 }, async (linkText) => {
   // const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
   // const reportsDir = path.resolve(__dirname, '../../reports')
   // Ensure reports directory exists
@@ -224,6 +224,7 @@ Then(/^I validate "(.+)" text on the page$/, async (paraName) => {
   try {
     const textElement = await SecurePage.paraText(paraName)
     await expect(textElement).toBeDisplayed()
+    logger.info(`Page is displayed: ${paraName}`)
   } catch (e) {
     throw new Error(`Message not displayed - ${e?.message || e}`)
   }

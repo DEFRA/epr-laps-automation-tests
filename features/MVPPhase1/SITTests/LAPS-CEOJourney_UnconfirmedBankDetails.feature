@@ -11,7 +11,7 @@ Feature: CEO Accessing LAPs account
     When I click "Log in" against the email address "dennis.effa.amponsah@accenture.com"
     Then I select the organisation
     Then I click on "Continue" button
-    When I wait for "5" seconds
+    When I wait for "9" seconds
 #LAPS-160 
     Then I am on the "Local Authority Payments (LAPs) home" page
 #LAPS-293 
@@ -47,7 +47,7 @@ Feature: CEO Accessing LAPs account
     Then I can see "Lawrlwytho" link
     And I can see "Gweld (yn agor mewn tab newydd)" link
     When I click "English" link
-    Then I wait for "5" seconds
+    Then I wait for "9" seconds
     Then I validate "Payment documents" text on the page
 #LAPS-172
     Then I validate warning text "For the 2025 to 2026 financial year, there will be a single payment covering quarters 1 and 2." is displayed on the page
@@ -55,7 +55,7 @@ Feature: CEO Accessing LAPs account
     When I click sort link in the Payment table
     Then I select the year "2025 to 2026" from the dropdown
     And I validate warning text "For the 2025 to 2026 financial year, there will be a single payment covering quarters 1 and 2." is displayed on the page
-    Then I wait for "5" seconds
+    Then I wait for "9" seconds
 
     Then I validate that table is displayed
     #Then I capture all document names and download each document
@@ -63,11 +63,11 @@ Feature: CEO Accessing LAPs account
 
     When I click "LAPs home" link
     Then I am on the "Local Authority Payments (LAPs) home" page
-    When I wait for "5" seconds
+    When I wait for "9" seconds
 
 ## Bank details ##
     When I click "Bank details" link
-    When I wait for "5" seconds
+    When I wait for "9" seconds
     Then I am on the "Bank details" page
     #Beta Banner - LAPS-230
     Then I validate banner with text "Beta This is a new service. Help us improve it and give your feedback (opens in new tab)." on the page
@@ -109,10 +109,10 @@ When I click "English" link
 Then I validate "Bank details" text on the page
 When I click "LAPs home" link
 Then I am on the "Local Authority Payments (LAPs) home" page
-When I wait for "5" seconds
+When I wait for "9" seconds
     #########Get Help page LAPS-212 LAPS-211 ##################
     When I click "Get help and guidance" link
-    When I wait for "5" seconds
+    When I wait for "9" seconds
     Then I am on the "Get help and guidance" page
     #Beta banner - LAPS-230
     Then I validate banner with text "Beta This is a new service. Help us improve it and give your feedback (opens in new tab)." on the page

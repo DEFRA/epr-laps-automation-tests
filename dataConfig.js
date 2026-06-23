@@ -47,7 +47,10 @@ export const dataConfig = {
     confirmedWalesHoF: 'TorfaenHOF@defradev.onmicrosoft.com',
     confirmedWalesHOW: 'TorfaenHOW@defradev.onmicrosoft.com',
     confirmedWalesWO: 'TorfaenWO@defradev.onmicrosoft.com',
-    confirmedWalesFO: 'TorfaenFO@defradev.onmicrosoft.com'
+    confirmedWalesFO: 'TorfaenFO@defradev.onmicrosoft.com',
+
+    // changeorganisation
+    changeorguser: 'hampshireCEO@defradev.onmicrosoft.com'
   },
 
   validdata: {

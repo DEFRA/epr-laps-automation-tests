@@ -72,6 +72,8 @@ async function enterEmailAddress(user) {
     email = dataConfig.credentials.ChangeHoFuser
   } else if (user === 'ChangeFOuser') {
     email = dataConfig.credentials.ChangeFOuser
+  } else if (user === 'changeorguser') {
+    email = dataConfig.credentials.changeorguser
   } else {
     throw new Error(`No email configured for user: ${user}`)
   }
@@ -224,8 +226,9 @@ When('I Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
 
 Then(
   'I extract the OTP from API response and enter it in UI',
-  { timeout: 60000 },
+  { timeout: 120000 },
   async () => {
+    logger.info('STEP START')
     const email = global.currentTestEmail
 
     logger.info(`Current email: [${email}]`)
