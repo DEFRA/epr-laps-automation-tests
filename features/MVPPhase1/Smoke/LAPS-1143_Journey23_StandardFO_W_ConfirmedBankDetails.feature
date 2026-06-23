@@ -74,7 +74,7 @@ Feature: Accessing LAPs account -  LAPS- 1143 Journey23_FO - Standard User- Wale
 
 #LAPS-162 Signout
     When I click "Sign out" link
-    When I wait for "5" seconds
+    When I wait for "9" seconds
     Then I am on the "You are now signed out of Local Authority Payments account" page
 #LAPS-216 - IDM Sign In  
     Given I am on the home page

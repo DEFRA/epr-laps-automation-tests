@@ -1,4 +1,4 @@
-Feature: Accessing LAPs account - LAPS-1145 Journey25_Change the user role from HoF to WO- Wales
+Feature: Accessing LAPs account - LAPS-ChangeOrganisationJourney
 
   Scenario: As a valid user, i must be able to login and select the required organisation and access the LAPs account and change the organisation without sign out.
 #LAPS-216 - IDM Sign In  

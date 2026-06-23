@@ -90,7 +90,7 @@ Feature: Accessing LAPs account - LAPS-1132 Journey11_FO - Admin User- Non Wales
 
 #LAPS-162 Signout
     When I click "Sign out" link
-    When I wait for "5" seconds
+    When I wait for "9" seconds
     Then I am on the "You are now signed out of Local Authority Payments account" page
 #LAPS-216 - IDM Sign In  
     Given I am on the home page
@@ -162,5 +162,5 @@ Feature: Accessing LAPs account - LAPS-1132 Journey11_FO - Admin User- Non Wales
     And I can see "Sign out" link
 #LAPS-367 IDM Signout, LAPS-364- FSS Signout LAPS-162 LAPS Signout
     When I click "Sign out" link
-    When I wait for "5" seconds
+    When I wait for "9" seconds
     Then I validate "Your Defra account" text on the page
