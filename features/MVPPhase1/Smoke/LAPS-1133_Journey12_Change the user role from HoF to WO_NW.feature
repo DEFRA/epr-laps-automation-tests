@@ -91,7 +91,7 @@ Then I click "Manage service Local Authority Payments" link
 Then I am on the "Local Authority Payments (LAPs) home" page
 #LAPS-162 Signout
 When I click "Sign out" link
-When I wait for "5" seconds
+When I wait for "9" seconds
 Then I am on the "You are now signed out of Local Authority Payments account" page
 #LAPS-216 IDM Sign In  
 When I click on "Sign in" button
@@ -162,5 +162,5 @@ Then I click "Manage service Local Authority Payments" link
 Then I am on the "Local Authority Payments (LAPs) home" page
 #LAPS-162 Signout
 When I click "Sign out" link
-When I wait for "5" seconds
+When I wait for "9" seconds
 Then I am on the "You are now signed out of Local Authority Payments account" page

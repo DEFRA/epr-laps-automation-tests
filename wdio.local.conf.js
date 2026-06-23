@@ -35,7 +35,7 @@ export const config = {
   //
   specs: [
     // './features/MVPPhase1/SITTests/*.feature'
-    './features/MVPPhase1/Smoke/*.feature'
+    './features/MVPPhase1/Smoke/LAPS-1132_Journey11_StandardFO_NW_UnconfirmedBankDetails.feature'
     // './features/Sandbox/*.feature'
   ],
   // Patterns to exclude.

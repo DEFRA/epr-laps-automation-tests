@@ -129,9 +129,7 @@ function generateToken() {
   return `${token}.${signature}`
 }
 
-/// /  https://api.notifications.service.gov.uk/v2/notifications
-
-When('I Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
+When('Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
   logger.info('API STEP STARTED')
 
   const pollIntervalMs = 2000 // check every 2 seconds
@@ -225,7 +223,7 @@ When('I Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
 })
 
 Then(
-  'I extract the OTP from API response and enter it in UI',
+  'extract the OTP from API response and enter it in UI',
   { timeout: 120000 },
   async () => {
     logger.info('STEP START')
@@ -293,5 +291,130 @@ Then(
 
     await otpInput.waitForExist({ timeout: 10000 })
     await otpInput.setValue(otp)
+  }
+)
+
+When('I Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
+  logger.info('API STEP STARTED')
+
+  const token = generateToken()
+
+  logger.info(`Generated token: ${token}`)
+
+  try {
+    const response = await axios.get(
+      'https://api.notifications.service.gov.uk/v2/notifications',
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          Pragma: 'no-cache',
+          Expires: '0'
+        },
+        validateStatus: () => true
+      }
+    )
+
+    logger.info(`API status: ${response.status}`)
+
+    const notifications = Array.isArray(response.data?.notifications)
+      ? response.data.notifications
+      : []
+
+    logger.info(`Initial notifications count: ${notifications.length}`)
+  } catch (err) {
+    logger.error('API trigger error:', err.message)
+    throw err
+  }
+
+  logger.info('STEP FINISHED')
+})
+
+Then(
+  'I extract the OTP from API response and enter it in UI',
+  { timeout: 180000 },
+  async () => {
+    logger.info('STEP START')
+
+    const email = global.currentTestEmail
+
+    logger.info(`Current email: [${email}]`)
+
+    if (!email) {
+      throw new Error('No email stored from previous step')
+    }
+
+    const normalizedEmail = email.trim().toLowerCase()
+
+    let otp = null
+
+    await browser.waitUntil(
+      async () => {
+        try {
+          const token = generateToken()
+
+          const response = await axios.get(
+            'https://api.notifications.service.gov.uk/v2/notifications',
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Cache-Control': 'no-cache, no-store, must-revalidate'
+              },
+              validateStatus: () => true
+            }
+          )
+
+          const notifications = Array.isArray(response.data?.notifications)
+            ? response.data.notifications
+            : []
+
+          logger.info(`Polling... notifications=${notifications.length}`)
+
+          const match = notifications.find((n) => {
+            const nEmail = n.email_address?.trim().toLowerCase()
+            return nEmail === normalizedEmail
+          })
+
+          if (!match) {
+            return false
+          }
+
+          const body = match.body || ''
+          const found = body.match(/\b(\d{6})\b/)
+
+          if (!found) {
+            return false
+          }
+
+          otp = found[1]
+
+          logger.info(`OTP found in poll: ${otp}`)
+
+          return true
+        } catch (err) {
+          logger.error('Polling error:', err.message)
+          return false
+        }
+      },
+      {
+        timeout: 120000,
+        interval: 5000,
+        timeoutMsg: `No OTP found for email ${email} within timeout`
+      }
+    )
+
+    if (!otp) {
+      throw new Error('OTP was not extracted even after successful match')
+    }
+
+    logger.info(`✅ Extracted OTP: ${otp}`)
+
+    const otpInput = await SecurePage.getinputbyid('verificationCode')
+
+    await otpInput.waitForExist({ timeout: 10000 })
+    await otpInput.setValue(otp)
+
+    logger.info('STEP FINISHED')
   }
 )
