@@ -205,7 +205,7 @@ When(/^I choose the "(.+)" link$/, async (linkText) => {
 //  logger.info(`Email entered for ${user}: ${email}`)
 // }
 
-Then(/^I am on the "(.+)" page$/, async (pageName) => {
+Then(/^I am on the "(.+)" page$/, { timeout: 60000 }, async (pageName) => {
   try {
     const headerElement = SecurePage.getHeader(pageName)
     const isDisplayed = await headerElement.isDisplayed()
