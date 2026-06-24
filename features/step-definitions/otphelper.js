@@ -72,8 +72,6 @@ async function enterEmailAddress(user) {
     email = dataConfig.credentials.ChangeHoFuser
   } else if (user === 'ChangeFOuser') {
     email = dataConfig.credentials.ChangeFOuser
-  } else if (user === 'changeorguser') {
-    email = dataConfig.credentials.changeorguser
   } else {
     throw new Error(`No email configured for user: ${user}`)
   }
@@ -128,6 +126,8 @@ function generateToken() {
 
   return `${token}.${signature}`
 }
+
+/// /  https://api.notifications.service.gov.uk/v2/notifications
 
 When('I Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
   logger.info('API STEP STARTED')
@@ -224,119 +224,42 @@ When('I Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
 
 Then(
   'I extract the OTP from API response and enter it in UI',
-  { timeout: 300000 },
+  { timeout: 60000 },
   async () => {
-    logger.info('STEP START')
-
     const email = global.currentTestEmail
+    const responses = global.apiResponses || []
 
-    logger.info(`Current email: [${email}]`)
+    logger.info('Email extracted is:', email)
+    logger.info('Response for OTP code is:', responses)
 
     if (!email) {
       throw new Error('No email stored from previous step')
     }
 
-    const normalizedEmail = email.trim().toLowerCase()
-    let otp = null
+    // Find notification for this email
+    const notification = responses.find((n) => n.email_address === email)
 
-    await browser.waitUntil(
-      async () => {
-        try {
-          const token = generateToken()
-
-          const response = await axios.get(
-            'https://api.notifications.service.gov.uk/v2/notifications',
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                'Cache-Control': 'no-cache, no-store, must-revalidate'
-              },
-              validateStatus: () => true
-            }
-          )
-
-          const notifications = Array.isArray(response.data?.notifications)
-            ? response.data.notifications
-            : []
-
-          logger.info(
-            `Polling... API status=${response.status}, notifications=${notifications.length}`
-          )
-
-          notifications.forEach((n, index) => {
-            logger.info(
-              `[${index}] email=[${n.email_address}] subject=[${n.subject || 'N/A'}]`
-            )
-          })
-
-          const matches = notifications.filter((n) => {
-            const nEmail = n.email_address?.trim().toLowerCase()
-
-            logger.info(
-              `Comparing API email=[${nEmail}] with expected=[${normalizedEmail}]`
-            )
-
-            return nEmail === normalizedEmail
-          })
-
-          logger.info(
-            `Found ${matches.length} matching notifications for ${normalizedEmail}`
-          )
-
-          if (matches.length === 0) {
-            return false
-          }
-
-          // Use latest notification if multiple exist
-          const latestNotification = matches.sort((a, b) => {
-            const dateA = new Date(a.created_at || 0)
-            const dateB = new Date(b.created_at || 0)
-            return dateB - dateA
-          })[0]
-
-          const body = latestNotification.body || ''
-
-          logger.info(
-            `Notification body (first 500 chars): ${body.substring(0, 500)}`
-          )
-
-          const found = body.match(/\b(\d{6})\b/)
-
-          if (!found) {
-            logger.info('No 6-digit OTP found in notification body')
-            return false
-          }
-
-          otp = found[1]
-
-          logger.info(`OTP found in poll: ${otp}`)
-
-          return true
-        } catch (err) {
-          logger.error(`Polling error: ${err.message}`)
-          return false
-        }
-      },
-      {
-        timeout: 300000,
-        interval: 5000,
-        timeoutMsg: `No OTP found for email ${normalizedEmail} within timeout`
-      }
-    )
-
-    if (!otp) {
-      throw new Error('OTP was not extracted even after successful match')
+    if (!notification) {
+      throw new Error(`No notification found for email ${email}`)
     }
 
-    logger.info(`Extracted OTP: ${otp}`)
+    const body = notification.body || ''
 
+    // Extract 6 digit code
+    // const match = body.match(/#(\d{6})/);
+    const match = body.match(/\b(\d{6})\b/)
+
+    if (!match) {
+      throw new Error('OTP code not found in notification body')
+    }
+
+    const otp = match[1]
+
+    logger.info(`✅ Extracted OTP: ${otp}`)
+
+    // Enter OTP in UI
     const otpInput = await SecurePage.getinputbyid('verificationCode')
-
     await otpInput.waitForExist({ timeout: 10000 })
-    await otpInput.waitForDisplayed({ timeout: 10000 })
-
     await otpInput.setValue(otp)
-
-    logger.info('STEP FINISHED')
   }
 )
