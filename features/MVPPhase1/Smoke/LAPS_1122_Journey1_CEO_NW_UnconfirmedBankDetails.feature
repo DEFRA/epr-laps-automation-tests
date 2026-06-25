@@ -10,9 +10,9 @@ When I enter the email address for "CEO_Unconfirmed"
 When I wait for "5" seconds
 Then I click on "Continue" button
 When I wait for "5" seconds
-# When I Trigger the OP API using valid cred
-# Then I extract the OTP from API response and enter it in UI
-Then I trigger the OP API and enter the OTP in UI
+When I Trigger the OP API using valid cred
+Then I extract the OTP from API response and enter it in UI
+
 And I wait for "9" seconds
 Then I click on "Continue" button
 And I wait for "9" seconds
