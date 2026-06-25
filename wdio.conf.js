@@ -11,9 +11,7 @@ export const config = {
   port: process.env.CHROMEDRIVER_PORT || 4444,
 
   // Tests to run
-  specs: [
-    './features/MVPPhase1/Smoke/LAPS_1122_Journey1_CEO_NW_UnconfirmedBankDetails.feature'
-  ],
+  specs: ['./features/MVPPhase1/Smoke/*.feature'],
   // Tests to exclude
   exclude: [],
   maxInstances: 1,
