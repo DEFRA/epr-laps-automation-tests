@@ -203,7 +203,7 @@ When('I Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
           logger.info(`${idx + 1}.`, item)
         })
       } else {
-        logger.warn('⚠️ No notifications found in this poll.')
+        logger.warn('No notifications found in this poll.')
       }
     } catch (err) {
       logger.error('API call error:', err.message)
@@ -216,7 +216,7 @@ When('I Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
   global.apiResponses = allNotifications
 
   // Final sorted log by latest created_at
-  logger.info('✅ Final accumulated notifications (latest first, max 20):')
+  logger.info('Final accumulated notifications (latest first, max 20):')
   global.apiResponses.forEach((item, i) => logger.info(`${i + 1}.`, item))
 
   logger.info('STEP FINISHED')
@@ -255,11 +255,99 @@ Then(
 
     const otp = match[1]
 
-    logger.info(`✅ Extracted OTP: ${otp}`)
+    logger.info(`Extracted OTP: ${otp}`)
 
     // Enter OTP in UI
     const otpInput = await SecurePage.getinputbyid('verificationCode')
     await otpInput.waitForExist({ timeout: 10000 })
     await otpInput.setValue(otp)
+  }
+)
+
+When(
+  'I trigger the OP API and enter the OTP in UI',
+  { timeout: 60000 },
+  async () => {
+    logger.info('API STEP STARTED')
+
+    const email = global.currentTestEmail
+
+    if (!email) {
+      throw new Error('No email stored from previous step')
+    }
+
+    // const pollIntervalMs = 2000
+    const pollDurationMs = 30000
+    const endTime = Date.now() + pollDurationMs
+
+    let otp = null
+
+    while (Date.now() < endTime && !otp) {
+      try {
+        const token = generateToken()
+
+        logger.info(`Generated token: ${token}`)
+
+        const response = await axios.get(
+          'https://api.notifications.service.gov.uk/v2/notifications',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+              'Cache-Control': 'no-cache, no-store, must-revalidate',
+              Pragma: 'no-cache',
+              Expires: '0'
+            },
+            validateStatus: () => true
+          }
+        )
+
+        const notifications = Array.isArray(response.data.notifications)
+          ? response.data.notifications
+          : []
+
+        logger.info(
+          `Found ${notifications.length} notifications in current poll`
+        )
+
+        // Find notification for current email
+        const notification = notifications.find(
+          (n) => n.email_address === email
+        )
+
+        if (notification) {
+          logger.info(`Notification found for email: ${email}`)
+
+          const body = notification.body || ''
+
+          const match = body.match(/\b(\d{6})\b/)
+
+          if (match) {
+            otp = match[1]
+            logger.info(` OTP extracted: ${otp}`)
+            break
+          }
+
+          logger.warn('Notification found but OTP not present yet')
+        } else {
+          logger.info(`No notification found for ${email} in this poll`)
+        }
+      } catch (err) {
+        logger.error(`API call error: ${err.message}`)
+      }
+    }
+
+    if (!otp) {
+      throw new Error(
+        `OTP not found for email ${email} after ${pollDurationMs / 1000} seconds`
+      )
+    }
+
+    const otpInput = await SecurePage.getinputbyid('verificationCode')
+    await otpInput.waitForExist({ timeout: 10000 })
+    await otpInput.setValue(otp)
+
+    logger.info(' OTP entered successfully')
+    logger.info('STEP FINISHED')
   }
 )

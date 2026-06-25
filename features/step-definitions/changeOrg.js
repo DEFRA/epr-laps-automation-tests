@@ -107,6 +107,8 @@ Then(
 
       logger.info(`Verified heading contains: ${selectedOption}`)
 
+      //  if you need to navigate to bank details, payment, get help  you have to add the step here
+
       // Only go back if NOT last iteration
       if (i < names.length - 1) {
         logger.info(
