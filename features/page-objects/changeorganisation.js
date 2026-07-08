@@ -4,7 +4,7 @@ class Changeorganisation {
     return $('//*[@id="resultsTable"]/ancestor::fieldset/legend//h1')
   }
 
-  // Table containing radio buttons
+  // Table containing radio buttonsss
   get resultsTable() {
     return $('//*[@id="resultsTable"]/div')
   }
