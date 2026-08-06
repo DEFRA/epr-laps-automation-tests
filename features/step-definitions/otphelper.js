@@ -7,12 +7,13 @@ import SecurePage from '../page-objects/secure.page.js'
 // import LoginPage from '../page-objects/login.page.js'
 import { dataConfig } from '../../dataConfig.js'
 import logger from '../../logger.js'
+import CryptoJS from 'crypto-js'
 // import * as fs from 'fs'
 // import allureReporter from '@wdio/allure-reporter'
 // import assert from 'assert'
 // import { fileURLToPath } from 'url'
 // import qs from 'qs'
-import crypto from 'crypto'
+// import crypto from 'crypto'
 // import { error } from 'console'
 // import * as jwt from 'jsonwebtoken'
 
@@ -85,49 +86,13 @@ async function enterEmailAddress(user) {
 /**
  * Base64 URL encode
  */
-function base64url(input) {
-  return Buffer.from(input)
-    .toString('base64')
-    .replace(/=+$/, '')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
+function base64url(source) {
+  let encodedSource = CryptoJS.enc.Base64.stringify(source)
+  encodedSource = encodedSource.replace(/=+$/, '')
+  encodedSource = encodedSource.replace(/\+/g, '-')
+  encodedSource = encodedSource.replace(/\//g, '_')
+  return encodedSource
 }
-
-/**
- * Generate JWT Token (HS256)
- */
-function generateToken() {
-  const header = {
-    alg: 'HS256',
-    typ: 'JWT'
-  }
-
-  const payload = {
-    iss: dataConfig.clientsecrets.POSTMAN_IDM_CLIENT_ID,
-    iat: Math.round(Date.now() / 1000)
-  }
-
-  const secret = dataConfig.clientsecrets.POSTMAN_IDM_CLIENT_SECRET
-  logger.info(`Client secret is displayed: ${secret}`)
-
-  const encodedHeader = base64url(JSON.stringify(header))
-  const encodedPayload = base64url(JSON.stringify(payload))
-
-  const token = `${encodedHeader}.${encodedPayload}`
-  logger.info(`token is generated: ${token}`)
-
-  const signature = crypto
-    .createHmac('sha256', secret)
-    .update(token)
-    .digest('base64')
-    .replace(/=+$/, '')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-
-  return `${token}.${signature}`
-}
-
-/// /  https://api.notifications.service.gov.uk/v2/notifications
 
 When('I Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
   logger.info('API STEP STARTED')
@@ -142,13 +107,38 @@ When('I Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
 
   while (Date.now() < endTime) {
     try {
-      const token = generateToken()
-      logger.info(`Generated token is: ${token}`)
+      const header = {
+        alg: 'HS256',
+        typ: 'JWT'
+      }
+
+      const payload = {
+        iss: '09b1ad42-fd28-4480-9e70-5444ab2ce7a8', // Replace with the correct client ID
+        iat: Math.round(Date.now() / 1000)
+      }
+
+      const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header))
+      const encodedHeader = base64url(stringifiedHeader)
+
+      const stringifiedPayload = CryptoJS.enc.Utf8.parse(
+        JSON.stringify(payload)
+      )
+      const encodedPayload = base64url(stringifiedPayload)
+
+      const token = `${encodedHeader}.${encodedPayload}`
+
+      const secret = '8474ea0f-237c-4661-b90f-0d2301969d3f' // Replace with the correct client secret
+      let signature = CryptoJS.HmacSHA256(token, secret)
+      signature = base64url(signature)
+
+      const signedToken = `${token}.${signature}`
+      logger.info(`Signed token: ${signedToken}`)
+      // Use the token in the API call
       const response = await axios.get(
         'https://api.notifications.service.gov.uk/v2/notifications',
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${signedToken}`,
             'Content-Type': 'application/json',
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             Pragma: 'no-cache',
@@ -157,7 +147,10 @@ When('I Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
           validateStatus: () => true
         }
       )
-      logger.info(`API response status is generated: ${response}`)
+
+      logger.info(
+        `API response data: ${JSON.stringify(response.data, null, 2)}`
+      )
       const responseArray = Array.isArray(response.data.notifications)
         ? response.data.notifications
         : []
