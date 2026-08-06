@@ -12,7 +12,7 @@ export const config = {
 
   // Tests to run
   specs: [
-    './features/MVPPhase1/Smoke/LAPS_1123_Journey2_CEO_NW_ConfirmedBankDetails.feature'
+    '/features/MVPPhase1/Smoke/LAPS_1123_Journey2_CEO_NW_ConfirmedBankDetails.feature'
   ],
   // Tests to exclude
   exclude: [],
