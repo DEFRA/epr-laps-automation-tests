@@ -94,42 +94,6 @@ function base64url(source) {
   return encodedSource
 }
 
-/**
- * Generate JWT Token (HS256)
- */
-function generateToken() {
-  const header = {
-    alg: 'HS256',
-    typ: 'JWT'
-  }
-
-  const payload = {
-    iss: dataConfig.clientsecrets.POSTMAN_IDM_CLIENT_ID,
-    iat: Math.round(Date.now() / 1000)
-  }
-
-  const secret = dataConfig.clientsecrets.POSTMAN_IDM_CLIENT_SECRET
-  logger.info(`Client secret is displayed: ${secret}`)
-
-  const encodedHeader = base64url(JSON.stringify(header))
-  const encodedPayload = base64url(JSON.stringify(payload))
-
-  const token = `${encodedHeader}.${encodedPayload}`
-  logger.info(`token is generated: ${token}`)
-
-  const signature = crypto
-    .createHmac('sha256', secret)
-    .update(token)
-    .digest('base64')
-    .replace(/=+$/, '')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-
-  return `${token}.${signature}`
-}
-
-/// /  https://api.notifications.service.gov.uk/v2/notifications
-
 When('I Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
   logger.info('API STEP STARTED')
 
