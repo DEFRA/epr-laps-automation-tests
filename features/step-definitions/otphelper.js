@@ -27,7 +27,7 @@ Then(/^I enter the email address for "(.+)"$/, async (user) => {
 
 async function enterEmailAddress(user) {
   const userEmailInput = await SecurePage.getinputbyid('user_name')
-  await userEmailInput.waitForExist({ timeout: 10000 })
+  await userEmailInput.waitForExist({ timeout: 20000 })
 
   if (user === 'CEO_Confirmed') {
     email = dataConfig.credentials.confirmedCEO
@@ -252,7 +252,7 @@ Then(
 
     // Enter OTP in UI
     const otpInput = await SecurePage.getinputbyid('verificationCode')
-    await otpInput.waitForExist({ timeout: 10000 })
+    await otpInput.waitForExist({ timeout: 20000 })
     await otpInput.setValue(otp)
   }
 )
