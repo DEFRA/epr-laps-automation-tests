@@ -2,7 +2,10 @@ import { When, Then } from '@wdio/cucumber-framework'
 import SecurePage from '../page-objects/secure.page.js'
 import { dataConfig } from '../../dataConfig.js'
 import logger from '../../logger.js'
-import { listNotifications, extractOtpFromNotification } from '../helpers/notify.js'
+import {
+  listNotifications,
+  extractOtpFromNotification
+} from '../helpers/notify.js'
 
 let email
 
@@ -112,7 +115,10 @@ When('I Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
         logger.warn('No notifications returned from Notify API on this poll')
       }
     } catch (err) {
-      logger.error('Error calling listNotifications helper:', err?.message || err)
+      logger.error(
+        'Error calling listNotifications helper:',
+        err?.message || err
+      )
     }
 
     // wait before next poll
@@ -121,7 +127,9 @@ When('I Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
 
   global.apiResponses = allNotifications
   logger.info('Final accumulated notifications (latest first, max 20):')
-  (global.apiResponses || []).forEach((item, i) => logger.info(`${i + 1}.`, item))
+  global.apiResponses?.forEach((item, i) => {
+    logger.info(`${i + 1}.`, item)
+  })
 
   logger.info('STEP FINISHED')
 })
@@ -133,8 +141,10 @@ Then(
     const targetEmail = global.currentTestEmail || email
     const responses = global.apiResponses || []
 
-    logger.info('Email extracted is:', targetEmail)
-    logger.info('Response for OTP code is:', responses)
+    logger.info(`Email extracted is:, ${targetEmail}`)
+    logger.info(
+      `Response for OTP code is: ${JSON.stringify(responses, null, 2)}`
+    )
 
     if (!targetEmail) {
       throw new Error('No email stored from previous step')

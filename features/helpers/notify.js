@@ -48,10 +48,10 @@ async function getAuthHeader() {
  * Query notifications by reference (or other query params).
  * Returns the notifications array from the API response.
  */
-export async function listNotifications({ reference, older_than, status } = {}) {
+export async function listNotifications({ reference, olderThan, status } = {}) {
   const params = {}
   if (reference) params.reference = reference
-  if (older_than) params.older_than = older_than
+  if (olderThan) params.older_than = olderThan
   if (status) params.status = status
 
   const auth = await getAuthHeader()
@@ -62,7 +62,7 @@ export async function listNotifications({ reference, older_than, status } = {}) 
       Authorization: auth,
       'Content-Type': 'application/json'
     },
-    timeout: 10000,
+    timeout: 20000,
     validateStatus: () => true
   })
   return res.data.notifications || []
@@ -95,14 +95,21 @@ export function extractOtpFromNotification(notification, { digits = 6 } = {}) {
   const possibleStrings = []
 
   // common places the message text might be:
-  if (notification.content?.body) possibleStrings.push(notification.content.body)
+  if (notification.content?.body)
+    possibleStrings.push(notification.content.body)
   if (notification.body) possibleStrings.push(notification.body)
   // personalisation object values
-  if (notification.personalisation && typeof notification.personalisation === 'object') {
-    possibleStrings.push(...Object.values(notification.personalisation).map(String))
+  if (
+    notification.personalisation &&
+    typeof notification.personalisation === 'object'
+  ) {
+    possibleStrings.push(
+      ...Object.values(notification.personalisation).map(String)
+    )
   }
   // template fields
-  if (notification.template && notification.template.body) possibleStrings.push(notification.template.body)
+  if (notification.template && notification.template.body)
+    possibleStrings.push(notification.template.body)
 
   const regex = new RegExp(`\\b(\\d{4,${digits}})\\b`)
   for (const s of possibleStrings) {
