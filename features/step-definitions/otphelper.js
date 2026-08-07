@@ -1,24 +1,12 @@
-import axios from 'axios'
 import { When, Then } from '@wdio/cucumber-framework'
-// import { expect, browser } from '@wdio/globals'
-// import * as path from 'path'
 import SecurePage from '../page-objects/secure.page.js'
-// import { clickElement, setValue } from './Common.js'
-// import LoginPage from '../page-objects/login.page.js'
 import { dataConfig } from '../../dataConfig.js'
 import logger from '../../logger.js'
-import CryptoJS from 'crypto-js'
-// import * as fs from 'fs'
-// import allureReporter from '@wdio/allure-reporter'
-// import assert from 'assert'
-// import { fileURLToPath } from 'url'
-// import qs from 'qs'
-// import crypto from 'crypto'
-// import { error } from 'console'
-// import * as jwt from 'jsonwebtoken'
+import {
+  listNotifications,
+  extractOtpFromNotification
+} from '../helpers/notify.js'
 
-// let apiResponse
-// let extractedOtp
 let email
 
 Then(/^I enter the email address for "(.+)"$/, async (user) => {
@@ -83,134 +71,65 @@ async function enterEmailAddress(user) {
   logger.info(`Email entered for ${user}: ${email}`)
 }
 
-/**
- * Base64 URL encode
- */
-function base64url(source) {
-  let encodedSource = CryptoJS.enc.Base64.stringify(source)
-  encodedSource = encodedSource.replace(/=+$/, '')
-  encodedSource = encodedSource.replace(/\+/g, '-')
-  encodedSource = encodedSource.replace(/\//g, '_')
-  return encodedSource
-}
-
 When('I Trigger the OP API using valid cred', { timeout: 60000 }, async () => {
   logger.info('API STEP STARTED')
 
   const pollIntervalMs = 2000 // check every 2 seconds
   const pollDurationMs = 30000 // poll for up to 30 seconds
-  const maxResponses = 20 // keep top 20 notifications
-
+  const maxResponses = 20
   const endTime = Date.now() + pollDurationMs
+
   let allNotifications = []
-  let lastTopCreatedAt = null
+  const targetEmail = global.currentTestEmail || email
+
+  if (!targetEmail) {
+    throw new Error('No email available to poll notifications for')
+  }
 
   while (Date.now() < endTime) {
     try {
-      const header = {
-        alg: 'HS256',
-        typ: 'JWT'
-      }
+      // Use the helper to list notifications
+      const responseArray = await listNotifications()
 
-      const payload = {
-        iss: '09b1ad42-fd28-4480-9e70-5444ab2ce7a8', // Replace with the correct client ID
-        iat: Math.round(Date.now() / 1000)
-      }
-
-      const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header))
-      const encodedHeader = base64url(stringifiedHeader)
-
-      const stringifiedPayload = CryptoJS.enc.Utf8.parse(
-        JSON.stringify(payload)
-      )
-      const encodedPayload = base64url(stringifiedPayload)
-
-      const token = `${encodedHeader}.${encodedPayload}`
-
-      const secret = '8474ea0f-237c-4661-b90f-0d2301969d3f' // Replace with the correct client secret
-      let signature = CryptoJS.HmacSHA256(token, secret)
-      signature = base64url(signature)
-
-      const signedToken = `${token}.${signature}`
-      logger.info(`Signed token: ${signedToken}`)
-      // Use the token in the API call
-      const response = await axios.get(
-        'https://api.notifications.service.gov.uk/v2/notifications',
-        {
-          headers: {
-            Authorization: `Bearer ${signedToken}`,
-            'Content-Type': 'application/json',
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            Pragma: 'no-cache',
-            Expires: '0'
-          },
-          validateStatus: () => true
-        }
-      )
-
-      logger.info(
-        `API response data: ${JSON.stringify(response.data, null, 2)}`
-      )
-      const responseArray = Array.isArray(response.data.notifications)
-        ? response.data.notifications
-        : []
-
-      if (responseArray.length > 0) {
-        // Sort by latest created_at first
-        const sortedPoll = [...responseArray].sort((a, b) => {
+      if (Array.isArray(responseArray) && responseArray.length > 0) {
+        // Merge and keep latest
+        const sorted = [...responseArray].sort((a, b) => {
           const timeA = new Date(a.created_at || a.completed_at).getTime()
           const timeB = new Date(b.created_at || b.completed_at).getTime()
           return timeB - timeA
         })
 
-        // Merge into global accumulator
-        sortedPoll.forEach((item) => {
-          const index = allNotifications.findIndex((n) => n.id === item.id)
-          if (index === -1) {
-            allNotifications.push(item)
-          } else {
-            allNotifications[index] = item // update if changed
-          }
-        })
-
-        // Sort global list
-        allNotifications.sort((a, b) => {
-          const timeA = new Date(a.created_at || a.completed_at).getTime()
-          const timeB = new Date(b.created_at || b.completed_at).getTime()
-          return timeB - timeA
-        })
-
-        // Keep only top 20
-        allNotifications = allNotifications.slice(0, maxResponses)
-
-        // Stop early if top notification timestamp stabilizes
-        const currentTopCreatedAt = allNotifications[0]?.created_at
-        if (lastTopCreatedAt && lastTopCreatedAt === currentTopCreatedAt) {
-          break // latest notification reached
+        // Keep only latest unique by id
+        const accumulator = []
+        for (const item of sorted) {
+          if (!accumulator.find((n) => n.id === item.id)) accumulator.push(item)
         }
-        lastTopCreatedAt = currentTopCreatedAt
 
-        // Optional: log top 3 notifications of this poll
-        logger.info('Top 3 latest notifications from this poll:')
-        allNotifications.slice(0, 3).forEach((item, idx) => {
-          logger.info(`${idx + 1}.`, item)
-        })
+        allNotifications = accumulator.slice(0, maxResponses)
+
+        // If we have at least one notification for the target email, stop early
+        if (allNotifications.find((n) => n.email_address === targetEmail)) {
+          break
+        }
       } else {
-        logger.warn('No notifications found in this poll.')
+        logger.warn('No notifications returned from Notify API on this poll')
       }
     } catch (err) {
-      logger.error('API call error:', err.message)
+      logger.error(
+        'Error calling listNotifications helper:',
+        err?.message || err
+      )
     }
 
+    // wait before next poll
     await new Promise((resolve) => setTimeout(resolve, pollIntervalMs))
   }
 
-  // Store globally for later steps
   global.apiResponses = allNotifications
-
-  // Final sorted log by latest created_at
   logger.info('Final accumulated notifications (latest first, max 20):')
-  global.apiResponses.forEach((item, i) => logger.info(`${i + 1}.`, item))
+  global.apiResponses?.forEach((item, i) => {
+    logger.info(`${i + 1}.`, item)
+  })
 
   logger.info('STEP FINISHED')
 })
@@ -219,34 +138,38 @@ Then(
   'I extract the OTP from API response and enter it in UI',
   { timeout: 60000 },
   async () => {
-    const email = global.currentTestEmail
+    const targetEmail = global.currentTestEmail || email
     const responses = global.apiResponses || []
 
-    logger.info('Email extracted is:', email)
-    logger.info('Response for OTP code is:', responses)
+    logger.info(`Email extracted is:, ${targetEmail}`)
+    logger.info(
+      `Response for OTP code is: ${JSON.stringify(responses, null, 2)}`
+    )
 
-    if (!email) {
+    if (!targetEmail) {
       throw new Error('No email stored from previous step')
     }
 
     // Find notification for this email
-    const notification = responses.find((n) => n.email_address === email)
+    const notification = responses.find((n) => n.email_address === targetEmail)
 
     if (!notification) {
-      throw new Error(`No notification found for email ${email}`)
+      throw new Error(`No notification found for email ${targetEmail}`)
     }
 
-    const body = notification.body || ''
+    // Try to extract OTP using helper (more robust than raw regex on body)
+    let otp = extractOtpFromNotification(notification)
 
-    // Extract 6 digit code
-    // const match = body.match(/#(\d{6})/);
-    const match = body.match(/\b(\d{6})\b/)
-
-    if (!match) {
-      throw new Error('OTP code not found in notification body')
+    if (!otp) {
+      // fallback to searching body for 6 digits
+      const body = notification.body || notification.content?.body || ''
+      const match = body.match(/\b(\d{6})\b/)
+      if (match) otp = match[1]
     }
 
-    const otp = match[1]
+    if (!otp) {
+      throw new Error('OTP code not found in notification')
+    }
 
     logger.info(`Extracted OTP: ${otp}`)
 
