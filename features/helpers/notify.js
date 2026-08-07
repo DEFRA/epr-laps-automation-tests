@@ -1,14 +1,48 @@
 import axios from 'axios'
+import CryptoJS from 'crypto-js'
 
-const notifyApi = axios.create({
-  baseURL: 'https://api.notifications.service.gov.uk',
-  headers: {
-    // use a GOV.UK Notify API key with appropriate permissions
-    Authorization: `Bearer ${process.env.NOTIFY_API_KEY}`,
-    'Content-Type': 'application/json'
-  },
-  timeout: 10_000
-})
+// === HARD-CODED (temporary) credentials ===
+// WARNING: These are sensitive and committing them to source control is insecure.
+// You've asked to hard-code them for now; please rotate and move to env vars or a secrets manager ASAP.
+const HARDCODED_ISS = '09b1ad42-fd28-4480-9e70-5444ab2ce7a8'
+const HARDCODED_SECRET = '8474ea0f-237c-4661-b90f-0d2301969d3f'
+// ==========================================
+
+const BASE_URL = 'https://api.notifications.service.gov.uk'
+
+function base64url(source) {
+  let encodedSource = CryptoJS.enc.Base64.stringify(source)
+  encodedSource = encodedSource.replace(/=+$/, '')
+  encodedSource = encodedSource.replace(/\+/g, '-')
+  encodedSource = encodedSource.replace(/\//g, '_')
+  return encodedSource
+}
+
+function createSignedJwt() {
+  const header = { alg: 'HS256', typ: 'JWT' }
+  const payload = { iss: HARDCODED_ISS, iat: Math.round(Date.now() / 1000) }
+
+  const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header))
+  const encodedHeader = base64url(stringifiedHeader)
+
+  const stringifiedPayload = CryptoJS.enc.Utf8.parse(JSON.stringify(payload))
+  const encodedPayload = base64url(stringifiedPayload)
+
+  const token = `${encodedHeader}.${encodedPayload}`
+
+  let signature = CryptoJS.HmacSHA256(token, HARDCODED_SECRET)
+  signature = base64url(signature)
+
+  return `${token}.${signature}`
+}
+
+async function getAuthHeader() {
+  if (process.env.NOTIFY_API_KEY) {
+    return `Bearer ${process.env.NOTIFY_API_KEY}`
+  }
+  // fallback to signed JWT using hard-coded iss/secret
+  return `Bearer ${createSignedJwt()}`
+}
 
 /**
  * Query notifications by reference (or other query params).
@@ -20,8 +54,17 @@ export async function listNotifications({ reference, older_than, status } = {}) 
   if (older_than) params.older_than = older_than
   if (status) params.status = status
 
-  const res = await notifyApi.get('/v2/notifications', { params })
-  // API returns { notifications: [...] }
+  const auth = await getAuthHeader()
+
+  const res = await axios.get(`${BASE_URL}/v2/notifications`, {
+    params,
+    headers: {
+      Authorization: auth,
+      'Content-Type': 'application/json'
+    },
+    timeout: 10000,
+    validateStatus: () => true
+  })
   return res.data.notifications || []
 }
 
@@ -30,7 +73,15 @@ export async function listNotifications({ reference, older_than, status } = {}) 
  * Returns the notification object from the API.
  */
 export async function getNotificationById(id) {
-  const res = await notifyApi.get(`/v2/notifications/${id}`)
+  const auth = await getAuthHeader()
+  const res = await axios.get(`${BASE_URL}/v2/notifications/${id}`, {
+    headers: {
+      Authorization: auth,
+      'Content-Type': 'application/json'
+    },
+    timeout: 10000,
+    validateStatus: () => true
+  })
   return res.data || res.data.notification || null
 }
 
@@ -71,7 +122,6 @@ export async function getOtpForReference(reference) {
 
   // pick most recent (API returns most recent first usually)
   const n = notifications[0]
-  // optionally fetch full notification if you need more fields:
   const full = await getNotificationById(n.id).catch(() => n)
   return extractOtpFromNotification(full)
 }
