@@ -8,7 +8,7 @@ Feature: HOF Accessing LAPs account
     Given I am on the Devhome page
     When I wait for "9" seconds
     Then I validate "Registered users" text on the page
-    When I click "Log in" against the email address "harriet.klim@accenture.com"
+    When I click "Log in" against the email address "tobi.omoyeni@accenture.com"
     Then I select the organisation
     Then I click on "Continue" button
     When I wait for "9" seconds
@@ -50,16 +50,20 @@ Feature: HOF Accessing LAPs account
     Then I wait for "9" seconds
     Then I validate "Payment documents" text on the page
 #LAPS-172
-    #Then I validate warning text "For the 2025 to 2026 financial year, there will be a single payment covering quarters 1 and 2." is displayed on the page
-    #Then I validate that Payment documents table is displayed
-    #When I click sort link in the Payment table
-    #Then I select the year "2025 to 2026" from the dropdown
-    #And I validate warning text "For the 2025 to 2026 financial year, there will be a single payment covering quarters 1 and 2." is displayed on the page
-    #Then I wait for "9" seconds
-
-    #Then I validate that table is displayed
-    #Then I capture all document names and download each document
-   #Then I download and view each document sequentially
+    When I click sort link in the Payment table
+    Then I select the year "2025 to 2026" from the dropdown
+    Then I validate warning text "For the 2025 to 2026 financial year, there will be a single payment covering quarters 1 and 2." is displayed on the page
+    Then I validate that Payment documents table is displayed
+    Then I wait for "9" seconds
+    Then I capture all document names and download each document
+    Then I download and view each document sequentially
+    Then I click sort link in the Payment table
+    Then I select the year "2026 to 2027" from the dropdown 
+    Then I validate warning text "For the 2025 to 2026 financial year, there will be a single payment covering quarters 1 and 2." is not displayed on the page
+    Then I validate that Payment documents table is displayed
+    Then I wait for "9" seconds
+    Then I capture all document names and download each document
+    Then I download and view each document sequentially
 
     When I click "LAPs home" link
     Then I am on the "Local Authority Payments (LAPs) home" page
@@ -78,14 +82,16 @@ Feature: HOF Accessing LAPs account
     Then I validate warning text "Please confirm your local authority's bank details." is displayed on the page
     Then I click "Confirm bank details" link
     Then I am on the "Confirm your local authority" page
-    #Then I confirm the bank details in the Confirm bank details page #Then I click on "Continue" button
-    Then I click "Back" link
+    Then I confirm the bank details in the Confirm bank details page 
+    Then I click on "Continue" button 
+    Then I click "Go back to LAPs home" link
     Then I am on the "Local Authority Payments (LAPs) home" page
     When I click "Bank details" link
     When I wait for "9" seconds
     Then I am on the "Bank details" page
     Then I click "Change your local authority" link
-    #Then I validate warning text "Confirmed" is displayed on the page #Then I validate warning text "Please confirm your local authority's bank details." is not displayed on the page
+    Then I validate warning text "Confirmed" is displayed on the page 
+    Then I validate warning text "Please confirm your local authority's bank details." is not displayed on the page
 #LAPS-308 LAPS-302 LAPS-300 LAPS-299 LAPS-298 LAPS-297 LAPS-296
     Then I can see "submit a request to update local authority’s bank details." link
     Then I click "submit a request to update local authority’s bank details." link
