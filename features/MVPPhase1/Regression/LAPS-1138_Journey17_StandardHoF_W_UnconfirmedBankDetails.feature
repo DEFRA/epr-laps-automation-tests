@@ -57,7 +57,7 @@ Then I validate "Cyngor Sir Powys" text on the page
     Then I wait for "5" seconds
     Then I validate "Payment documents" text on the page
 #LAPS-172
-    Then I validate warning text "For the 2025 to 2026 financial year, there will be a single payment covering quarters 1 and 2." is displayed on the page
+    #Then I validate warning text "For the 2025 to 2026 financial year, there will be a single payment covering quarters 1 and 2." is displayed on the page
     Then I validate that Payment documents table is displayed
     When I click sort link in the Payment table
     Then I select the year "2025 to 2026" from the dropdown

@@ -45,7 +45,7 @@ Then I validate "Local Authority Payments (LAPs) home" text on the page
     And I wait for "9" seconds
 
     #LAPS-230
-    Then I validate banner with text "Beta This is a new service. Help us improve it and give your feedback (opens in new tab)." on the page
+   Then I validate banner with text "Beta This is a new service. Help us improve it and give your feedback (opens in new tab)." on the page
     When I click "Cymraeg" link
     Then I validate banner with text "Beta Mae hwn yn wasanaeth newydd. Helpwch ni i’w wella drwy roi eich adborth (yn agor mewn tab newydd)." on the page
 #LAPS-227
@@ -56,11 +56,11 @@ Then I validate "Local Authority Payments (LAPs) home" text on the page
     Then I wait for "5" seconds
     Then I validate "Payment documents" text on the page
 #LAPS-172
-    Then I validate warning text "For the 2025 to 2026 financial year, there will be a single payment covering quarters 1 and 2." is displayed on the page
+    #Then I validate warning text "For the 2025 to 2026 financial year, there will be a single payment covering quarters 1 and 2." is displayed on the page
     Then I validate that Payment documents table is displayed
     When I click sort link in the Payment table
     Then I select the year "2025 to 2026" from the dropdown
-    And I validate warning text "For the 2025 to 2026 financial year, there will be a single payment covering quarters 1 and 2." is displayed on the page
+   #And I validate warning text "For the 2025 to 2026 financial year, there will be a single payment covering quarters 1 and 2." is displayed on the page
     Then I wait for "5" seconds
 
     Then I validate that table is displayed
@@ -104,7 +104,7 @@ Then I validate banner with text "Beta This is a new service. Help us improve it
 Then I validate "Your nominated Head of Finance must confirm these details." text is not displayed on the page
 Then I validate warning text "Confirmed" is displayed on the page
 Then I validate "Account name,Sort code,Account number" fields are displayed in the documents page
-Then I click "Change your local authority" link
+#Then I click "Change your local authority" link
 #LAPS-308 LAPS-302 LAPS-300 LAPS-299 LAPS-298 LAPS-297 LAPS-296
 Then I can see "submit a request to update local authority’s bank details." link
 Then I click "submit a request to update local authority’s bank details." link

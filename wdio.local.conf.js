@@ -35,7 +35,7 @@ export const config = {
   //
   specs: [
     // './features/MVPPhase1/SITTests/*.feature'
-    './features/MVPPhase1/SITTests/*.feature'
+    './features/MVPPhase1/SITTests/**/*.feature'
     // './features/Sandbox/*.feature'
   ],
   // Patterns to exclude.

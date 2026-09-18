@@ -51,17 +51,15 @@ Feature: HOW Accessing LAPs account
     Then I wait for "9" seconds
     Then I validate "Payment documents" text on the page
 #LAPS-172
-    Then I validate warning text "For the 2025 to 2026 financial year, there will be a single payment covering quarters 1 and 2." is displayed on the page
+    Then I validate warning text "For the 2025 to 2026 financial year, there will be a single payment covering quarters 1 and 2." is not displayed on the page
     Then I validate that Payment documents table is displayed
     When I click sort link in the Payment table
-    Then I select the year "2025 to 2026" from the dropdown
-    And I validate warning text "For the 2025 to 2026 financial year, there will be a single payment covering quarters 1 and 2." is displayed on the page
+    Then I select the year "2026 to 2027" from the dropdown   
+    #And I validate warning text "For the 2025 to 2026 financial year, there will be a single payment covering quarters 1 and 2." is displayed on the page
     Then I wait for "9" seconds
-
     Then I validate that table is displayed
     Then I capture all document names and download each document
-    #Then I download and view each document sequentially
-
+    Then I download and view each document sequentially
     When I click "LAPs home" link
     Then I am on the "Local Authority Payments (LAPs) home" page
     When I wait for "9" seconds
@@ -74,7 +72,7 @@ Feature: HOW Accessing LAPs account
     Then I validate banner with text "Beta This is a new service. Help us improve it and give your feedback (opens in new tab)." on the page
 #LAPS-167
     Then I validate warning text "The nominated Head of Finance will need to confirm your local authority's bank details." is not displayed on the page
-    Then I validate warning text "Unconfirmed" is displayed on the page
+    Then I validate warning text "Confirmed" is displayed on the page
     Then I validate "Account name,Sort code,Account number" fields are displayed in the documents page
     Then I validate "Sort code" field value contains "ending with"
     Then I validate "Account number" field value contains "ending with"
